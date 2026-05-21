@@ -48,3 +48,9 @@ typedef struct s_wait_list
 	t_coder				coder;
 	struct s_wait_list	*next;
 }						t_wait_list;
+
+typedef struct s_surveillance
+{
+	t_coder* coders;
+	t_data* data;
+}
