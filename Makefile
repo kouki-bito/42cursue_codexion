@@ -1,26 +1,31 @@
-NAME = codexion CC = cc CFLAGS = -Wall - Wextra -
-	Werror
+NAME        = codexion
 
-		SRCS = main.c src /
-	parse.c
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror
+# POSIXスレッド（pthread）を使うために必須のフラグ
+PTHREAD     = -pthread
 
-		OBJS = $(SRCS
-					:.c =.o)
+SRCS        = main.c \
+              src/parse.c \
+			  src/init.c \
+			 
 
-					all : $(NAME)
+OBJS        = $(SRCS:.c=.o)
 
-								$(NAME)
-	: $(OBJS) $(CC) $(CFLAGS) $(OBJS) -
-		o $(NAME)
+all: $(NAME)
 
-			%.o : %.c $(CC) $(CFLAGS) -
-		c $ <
-	-o $ @
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(PTHREAD) $(OBJS) -o $(NAME)
 
-		clean : rm -
-		f $(OBJS) fclean : clean rm -
-							f $(NAME)
+%.o: %.c
+	$(CC) $(CFLAGS) $(PTHREAD) -c $< -o $@
 
-								re : fclean all
+clean:
+	rm -f $(OBJS)
 
-										.PHONY : all clean fclean re
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

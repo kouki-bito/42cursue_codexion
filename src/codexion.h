@@ -70,6 +70,6 @@ struct							s_wait_list
 int								ft_parse(int, char *[], t_data *);
 int								ft_is_num(char[]);
 int								ft_check_format(char *[]);
-
-int								ft_init_coder(t_coder *coder);
-int								ft_init_dongle(t_dongle *dongle);
+int								init_coder(t_data *data);
+int								init_dongle(t_data *data);
+int								clean_up(t_data *data);

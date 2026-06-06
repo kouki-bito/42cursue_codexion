@@ -1,6 +1,6 @@
 
 #include "src/codexion.h"
-
+void* routing(void* argv);
 int	main(int argc, char *argv[])
 {
 	t_data	data;
@@ -9,105 +9,37 @@ int	main(int argc, char *argv[])
 	{
 		return (0);
 	}
-	printf("number_of_coders: %d\n", data.number_of_coders);
-	printf("time_to_burnout: %d\n", data.time_to_burnout);
-	printf(" time_to_compile: %d\n", data.time_to_compile);
-	printf("time_to_debug: %d\n", data.time_to_debug);
-	printf("time_to_refactor: %d\n", data.time_to_refactor);
-	printf("number_of_compiles_required: %d\n",
+	printf("number_of_coders: %lld\n", data.number_of_coders);
+	printf("time_to_burnout: %lld\n", data.time_to_burnout);
+	printf(" time_to_compile: %lld\n", data.time_to_compile);
+	printf("time_to_debug: %lld\n", data.time_to_debug);
+	printf("time_to_refactor: %lld\n", data.time_to_refactor);
+	printf("number_of_compiles_required: %lld\n",
 		data.number_of_compiles_required);
-	printf("dongle_cooldown: %d\n", data.dongle_cooldown);
+	printf("dongle_coolldown: %lld\n", data.dongle_cooldown);
 	printf("scheduler: %s\n", data.scheduler);
+	if(init_coder(&data)){
+		printf("coder successd\n");
+	}
+	if(init_dongle(&data)){
+		printf("dongle successd\n");
+	}
+	for(int i=0;i<data.number_of_coders;i++){
+		pthread_create(&(data.coder[i].thread),NULL,&routing,&(data.coder[i]));
+	}
+	
+	for(int i = 0; i < data.number_of_coders; i++){
+		pthread_join(data.coder[i].thread, NULL);
+	}
+	printf("fifif\n");
+	clean_up(&data);
 }
 
-int	init_coder(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	if (data == NULL)
-		return (0);
-	data->coder = (t_data *)malloc(sizeof(t_coder) * data->number_of_coders);
-	if (!data->coder)
-		return (0);
-	while (i < data->number_of_coders)
-	{
-		data->coder[i].last_compile = 0;
-		data->coder[i].last_compile = 0;
-		data->coder[i].id = i + 1;
-		data->coder[i].left_dongle = &data->dongle[i];
-		data->coder[i].right_dongle = &data->dongle[(i + 1)
-			% data->number_of_coders];
-		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL))
-			return (0);
-		i++;
+void* routing(void* argv){
+	t_coder* coder = (t_coder*)argv;
+	for(int i=0;i<10;i++){
+		printf("coder id:%d\n",coder->id);
 	}
-	return (1);
-}
+	return NULL;
 
-int	init_dongle(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	if (!data)
-		return (0);
-	while (i < data->number_of_coders)
-	{
-		if (pthread_mutex_init(&(data->dongle[i].mutex), NULL)
-			&& pthread_cond_init(&(data->dongle[i].cond), NULL))
-			;
-			return (0);
-		data->dongle[i].last_compile = 0;
-		data->dongle[i].take_in_use = 0;
-		data->dongle[i].head = NULL;
-		i++;
-	}
-	return (1);
-}
-
-int	clean_up(t_data *data)
-{
-	int	i;
-
-	if (!data->dongle)
-		return (0);
-	pthread_mutex_destroy(&data->data_mutex);
-	pthread_mutex_destroy(&data->log_mutex);
-	i = 0;
-	while (i < data->number_of_coders)
-	{
-		pthread_mutex_destroy(&data->coder[i].coder_mutex);
-		i++;
-	}
-	free(data->coder);
-	clean_dongle(data);
-	return (1);
-}
-
-int	clean_dongle(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->number_of_coders)
-	{
-		pthread_mutex_destroy(&(data->dongle[i].mutex));
-		pthread_cond_destroy(&(data->dongle[i].cond));
-		free_que((data->dongle[i].head));
-		i++;
-	}
-	free(data->dongle);
-	return 1;
-}
-
-void	free_que(t_wait_list *head)
-{
-	t_wait_list *tmp;
-	while (head)
-	{
-		tmp = head->next;
-		free(head);
-		head = tmp;
-	}
 }
