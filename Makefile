@@ -8,6 +8,7 @@ PTHREAD     = -pthread
 SRCS        = main.c \
               src/parse.c \
 			  src/init.c \
+			  src/utilis.c
 			 
 
 OBJS        = $(SRCS:.c=.o)

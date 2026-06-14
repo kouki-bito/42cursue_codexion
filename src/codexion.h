@@ -73,3 +73,6 @@ int								ft_check_format(char *[]);
 int								init_coder(t_data *data);
 int								init_dongle(t_data *data);
 int								clean_up(t_data *data);
+void							*execute_safely(pthread_mutex_t *mutex,
+									void *(*func)(t_coder *), t_coder *argv);
+void							*take(t_coder *argv);

@@ -1,6 +1,10 @@
 
 #include "src/codexion.h"
-void* routing(void* argv);
+
+
+void	*routing(void *argv);
+
+
 int	main(int argc, char *argv[])
 {
 	t_data	data;
@@ -18,28 +22,34 @@ int	main(int argc, char *argv[])
 		data.number_of_compiles_required);
 	printf("dongle_coolldown: %lld\n", data.dongle_cooldown);
 	printf("scheduler: %s\n", data.scheduler);
-	if(init_coder(&data)){
+	if (init_coder(&data))
+	{
 		printf("coder successd\n");
 	}
-	if(init_dongle(&data)){
+	if (init_dongle(&data))
+	{
 		printf("dongle successd\n");
 	}
-	for(int i=0;i<data.number_of_coders;i++){
-		pthread_create(&(data.coder[i].thread),NULL,&routing,&(data.coder[i]));
+	for (int i = 0; i < data.number_of_coders; i++)
+	{
+		pthread_create(&(data.coder[i].thread), NULL, &routing,
+			&(data.coder[i]));
 	}
-	
-	for(int i = 0; i < data.number_of_coders; i++){
+	for (int i = 0; i < data.number_of_coders; i++)
+	{
 		pthread_join(data.coder[i].thread, NULL);
 	}
-	printf("fifif\n");
+	// printf("fifif\n");
 	clean_up(&data);
 }
 
-void* routing(void* argv){
-	t_coder* coder = (t_coder*)argv;
-	for(int i=0;i<10;i++){
-		printf("coder id:%d\n",coder->id);
-	}
-	return NULL;
+void	*routing(void *argv)
+{
+	t_coder	*coder;
+	// int		result;
 
+	coder = (t_coder *)argv;
+	execute_safely(&coder->coder_mutex, take,coder);
+	// printf("coder:%d, take_lock_func:%d\n", coder->id, result);
+	return (NULL);
 }

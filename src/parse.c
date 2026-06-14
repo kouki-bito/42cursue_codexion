@@ -35,6 +35,7 @@ int	ft_check_format(char *argv[])
 	{
 		if (!ft_is_num(argv[i]))
 			return (0);
+		if (strlen(argv[i]))
 		i++;
 	}
 	if (strcmp(argv[8], "fifo") != 0 && strcmp(argv[8], "edf") != 0)
