@@ -1,6 +1,6 @@
 
 #include "src/codexion.h"
-
+#include <time.h>
 
 void	*routing(void *argv);
 
@@ -41,11 +41,14 @@ int	main(int argc, char *argv[])
 	}
 	// printf("fifif\n");
 	clean_up(&data);
+
 }
 
 void	*routing(void *argv)
 {
 	t_coder	*coder;
+	pthread_cond_t cond;
+	pthread_cond_init(&cond,NULL);
 	// int		result;
 
 	coder = (t_coder *)argv;

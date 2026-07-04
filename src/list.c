@@ -1,16 +1,16 @@
 #include "codexion.h"
 
-void	ft_lstadd_back(t_wait_list **lst, t_wait_list *new)
+void ft_lstadd_back(deque **lst, deque *new)
 {
-	t_wait_list	*currect;
+	deque *currect;
 
 	currect = *lst;
 	if (new == NULL)
-		return ;
+		return;
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return ;
+		return;
 	}
 	while (currect->next != NULL)
 	{
@@ -18,31 +18,40 @@ void	ft_lstadd_back(t_wait_list **lst, t_wait_list *new)
 	}
 	currect->next = new;
 }
-void	ft_lstadd_front(t_wait_list **lst, t_wait_list *new)
+void ft_lstadd_front(deque **lst, deque *new)
 {
-	t_wait_list	*head;
+	deque *head;
 
 	if (new == NULL)
-		return ;
+		return;
 	head = *lst;
 	new->next = head;
 	*lst = new;
 }
-t_wait_list	*ft_lstnew(void *coder)
+void ft_delete_list(deque **lst)
 {
-	t_wait_list	*new;
+	deque *currect;
 
-	new = (t_wait_list *)malloc(sizeof(t_wait_list) * 1);
+	currect = *lst;
+	lst = currect->next;
+	free(currect);
+}
+
+deque *ft_lstnew(t_coder *coder)
+{
+	deque *new;
+
+	new = (deque *)malloc(sizeof(deque) * 1);
 	if (!new)
 		return (NULL);
 	new->next = NULL;
 	new->coder = coder;
 	return (new);
 }
-int	ft_lstsize(t_wait_list *lst)
+int ft_lstsize(deque *lst)
 {
-	int			length;
-	t_wait_list	*current;
+	int length;
+	deque *current;
 
 	if (!lst)
 		return (0);

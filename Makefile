@@ -2,13 +2,14 @@ NAME        = codexion
 
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
-# POSIXスレッド（pthread）を使うために必須のフラグ
+
 PTHREAD     = -pthread
 
 SRCS        = main.c \
               src/parse.c \
 			  src/init.c \
-			  src/utilis.c
+			  src/utilis.c \
+			  src/dongle.c
 			 
 
 OBJS        = $(SRCS:.c=.o)
