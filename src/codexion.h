@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
+#include <sys/time.h>
 
 typedef struct s_data t_data;
 typedef struct s_dongle t_dongle;
@@ -37,6 +39,7 @@ struct s_data
 	long long start_time;
 	pthread_mutex_t log_mutex;
 	pthread_mutex_t data_mutex;
+	pthread_cond_t usleep_cond;
 	t_coder *coder;
 	t_dongle *dongle;
 };
@@ -62,8 +65,12 @@ struct s_coder
 {
 	pthread_t thread;
 	int id;
-	int last_compile;
+	long int last_compile;
+	int count_compile;
 	pthread_mutex_t coder_mutex;
+	//coder task mutexはinit処理をしてない
+	pthread_mutex_t coder_task_mutex;
+
 	t_data *data;
 	t_dongle *left_dongle;
 	t_dongle *right_dongle;

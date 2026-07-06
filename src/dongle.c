@@ -13,6 +13,14 @@ int take_dongle_use_in(t_dongle* dongle){
     return 1;
 }
 
+void take_dongle(t_dongle* dongle){
+    if(take_dongle_use_in(dongle)){
+        
+    }else{
+       
+    }
+}
+
 int add_dongle_que(t_dongle* dongle,t_coder* coder){
     if(take_dongle_use_in(dongle)){
         return 1;
