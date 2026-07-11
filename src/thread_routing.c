@@ -49,16 +49,7 @@ struct timespec	get_time(void)
 	ts.tv_nsec = tv.tv_usec * 1000;
 	return (ts);
 }
-struct timespec	get_time(void)
-{
-	struct timespec	ts;
-	struct timeval	tv;
 
-	gettimeofday(&tv, NULL);
-	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = tv.tv_usec * 1000;
-	return (ts);
-}
 long long	get_time_ms(void)
 {
 	struct timeval	tv;

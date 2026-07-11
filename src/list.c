@@ -64,3 +64,19 @@ int ft_lstsize(deque *lst)
 	}
 	return (length);
 }
+int ft_find_coder(deque** head,t_coder* coder)
+{
+	deque* current;
+	if (!head)
+		return 0;
+	current = head;
+	while (current)
+	{
+		if( current->coder->id == coder->id){
+			return 1;
+		}
+		current = current->next;
+	}
+	return 0;
+	
+}

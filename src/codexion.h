@@ -91,4 +91,14 @@ int clean_up(t_data *data);
 void *execute_safely(pthread_mutex_t *mutex,
 					 void *(*func)(t_coder *), t_coder *argv);
 void *take(t_coder *argv);
-int take_dongle(t_coder* coder,t_dongle* dongle);
+int take_dongles(t_coder* coder);
+int take_dongle(t_dongle* dongle,t_data* data);
+long long	get_time_ms(void);
+void	action_usleep(long long time, t_coder *coder);
+
+void ft_delete_list(deque **lst);
+void ft_lstadd_back(deque **lst, deque *new);
+
+deque *ft_lstnew(t_coder *coder);
+int ft_find_coder(deque** head,t_coder* coder);
+void ft_lstadd_front(deque **lst, deque *new)
