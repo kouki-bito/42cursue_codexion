@@ -3,10 +3,9 @@
 int	ft_parse(int argc, char *argv[], t_data *data)
 {
 	if (argc != 9)
-		return (write(2, "Error: Invalid number of arguments.\n", 36),0);
+		return (write(2, "Error: Invalid number of arguments.\n", 36), 0);
 	if (!ft_check_format(argv))
-		return (write(2, "Error: Invalid format.\n", 24),0);
-
+		return (write(2, "Error: Invalid format.\n", 24), 0);
 	(*data).number_of_coders = ft_atoi_safe(argv[1]);
 	(*data).time_to_burnout = ft_atoi_safe(argv[2]);
 	(*data).time_to_compile = ft_atoi_safe(argv[3]);
@@ -21,17 +20,17 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 		|| (*data).number_of_compiles_required == -1
 		|| (*data).dongle_cooldown == -1)
 		return (0);
-	if(init_mutex_and_cond(data))
+	if (init_mutex_and_cond(data))
 		return (0);
 	return (1);
 }
-int init_mutex_and_cond(t_data* data)
+int	init_mutex_and_cond(t_data *data)
 {
 	if (pthread_mutex_init(&(*data).data_mutex, NULL)
-		&& pthread_mutex_init((&(*data).log_mutex), NULL) && pthread_cond_init(&(data->usleep_cond),NULL))
+		&& pthread_mutex_init((&(*data).log_mutex), NULL)
+		&& pthread_cond_init(&(data->usleep_cond), NULL))
 		return (0);
-	return 1;
-
+	return (1);
 }
 int	ft_atoi_safe(char *str)
 {

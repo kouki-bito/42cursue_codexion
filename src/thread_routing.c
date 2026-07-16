@@ -92,7 +92,7 @@ void	start_compile(t_coder *coder)
 		action_usleep(coder->data->time_to_compile, coder);
 		pthread_mutex_lock(&coder->coder_mutex);
 		coder->last_compile = get_time_ms();
-        coder->count_compile+=1;
+		coder->count_compile += 1;
 		pthread_mutex_unlock(&coder->coder_mutex);
 	}
 }
