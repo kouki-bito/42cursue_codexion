@@ -58,21 +58,22 @@ void	edf(t_dongle *dongle, t_coder *coder)
 			return ;
 		}
 		current = dongle->head;
-        prev = NULL;
+		prev = NULL;
 		while (current)
 		{
 			if (!compare_last_compile(coder, current->coder, time))
 			{
-                if(prev==NULL){
-                    ft_lstadd_front(dongle->head,ft_lstnew(coder));
-                    return;
-                }
-                prev->next=ft_lstnew(coder);
-                prev->next->next=current;
-                return;
+				if (prev == NULL)
+				{
+					ft_lstadd_front(dongle->head, ft_lstnew(coder));
+					return ;
+				}
+				prev->next = ft_lstnew(coder);
+				prev->next->next = current;
+				return ;
 			}
-            prev= current;
-            current = current->next;
+			prev = current;
+			current = current->next;
 		}
 	}
 	return ;
