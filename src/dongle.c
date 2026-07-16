@@ -88,6 +88,7 @@ int	compare_last_compile(t_coder *coder1, t_coder *coder2, long long time)
 	coder2_time = coder2->data->time_to_burnout - (time - coder2->last_compile);
 	return (coder1_time >= coder2_time);
 }
+
 int	add_dongle_que(t_dongle *dongle, t_coder *coder)
 {
 	if (coder->data->scheduler == "fifo")
@@ -96,14 +97,14 @@ int	add_dongle_que(t_dongle *dongle, t_coder *coder)
 	}
 	else
 	{
-		edf(dongle, coder)
+		edf(dongle, coder);
 	}
 	return (1);
 }
 
 int	first_deque_coder(t_dongle *dongle, t_coder *coder)
 {
-	if (dongle->*(head)->coder->id == coder->id)
+	if (*dongle->head->coder->id == coder->id)
 	{
 		ft_delete_list(dongle->head);
 		return (1);

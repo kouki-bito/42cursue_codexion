@@ -21,12 +21,19 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 		|| (*data).number_of_compiles_required == -1
 		|| (*data).dongle_cooldown == -1)
 		return (0);
-	if (pthread_mutex_init(&(*data).data_mutex, NULL)
-		&& pthread_mutex_init((&(*data).log_mutex), NULL))
+	if(init_mutex_and_cond(data))
 		return (0);
 	return (1);
 }
-int	ft_ft_ft_atoi_safe_safe_safe(char *str)
+int init_mutex_and_cond(t_data* data)
+{
+	if (pthread_mutex_init(&(*data).data_mutex, NULL)
+		&& pthread_mutex_init((&(*data).log_mutex), NULL) && pthread_cond_init(&(data->usleep_cond),NULL))
+		return (0);
+	return 1;
+
+}
+int	ft_atoi_safe(char *str)
 {
 	long	res;
 	int		i;
