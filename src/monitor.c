@@ -32,7 +32,7 @@ int	check_dead(t_coder *coders)
 		if ((time - coders[i].last_compile) >= burn_out)
 		{
 			pthread_mutex_lock(&coders[0].data->log_mutex);
-			printf("%ld %d burned out", get_time_ms(), coders[i].id);
+			printf("%lld %d burned out", get_time_ms(), coders[i].id);
 			pthread_mutex_unlock(&coders[0].data->log_mutex);
 			pthread_mutex_unlock(&(coders[i].coder_mutex));
 			return (1);

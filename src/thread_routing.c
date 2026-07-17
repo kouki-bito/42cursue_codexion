@@ -5,7 +5,7 @@ static int	check_simulation_status(t_coder *coder)
 {
 	int	ended;
 
-	ended = is_simulation_ended(&(coder->data));
+	ended = is_simulation_ended(coder->data);
 	return (ended);
 }
 
@@ -81,14 +81,14 @@ void	leave_dongle(t_coder *coder)
 	pthread_mutex_lock(&(coder->right_dongle->mutex));
 	coder->right_dongle->take_in_use = 0;
 	pthread_mutex_unlock(&(coder->right_dongle->mutex));
-	pthread_cond_broad(&coder->right_dongle->cond);
-	pthread_cond_broad(&coder->left_dongle->cond);
+	pthread_cond_broadcast(&coder->right_dongle->cond);
+	pthread_cond_broadcast(&coder->left_dongle->cond);
 }
 void	start_compile(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{
-		printf("%ld %d is compiling", get_time_ms(), coder->id);
+		printf("%lld %d is compiling", get_time_ms(), coder->id);
 		action_usleep(coder->data->time_to_compile, coder);
 		pthread_mutex_lock(&coder->coder_mutex);
 		coder->last_compile = get_time_ms();
@@ -100,7 +100,7 @@ void	start_debuging(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{
-		printf("%ld %d is debuging", get_time_ms(), coder->id);
+		printf("%lld %d is debuging", get_time_ms(), coder->id);
 		action_usleep(coder->data->time_to_debug, coder);
 	}
 }
@@ -108,7 +108,7 @@ void	start_refactor(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{
-		printf("%ld %d is refactoring", get_time_ms(), coder->id);
+		printf("%lld %d is refactoring", get_time_ms(), coder->id);
 		action_usleep(coder->data->time_to_refactor, coder);
 	}
 }

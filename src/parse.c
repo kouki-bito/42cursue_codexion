@@ -20,7 +20,7 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 		|| (*data).number_of_compiles_required == -1
 		|| (*data).dongle_cooldown == -1)
 		return (0);
-	if (init_mutex_and_cond(data))
+	if (!init_mutex_and_cond(data))
 		return (0);
 	return (1);
 }

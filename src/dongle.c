@@ -20,20 +20,20 @@ void	take_dongle(t_dongle *dongle, t_coder *coder)
 		action_usleep(cool_time, coder);
 	}
 	dongle->take_in_use = 1;
-	pthread_mutex_unlock($(dongle->mutex));
+	pthread_mutex_unlock(&(dongle->mutex));
 }
 
 void	take_dongles(t_coder *coder)
 {
 	if (coder->id % 2 == 1)
 	{
-		take_dongle(&(coder->left_dongle), coder);
-		take_dongle(&(coder->right_dongle), coder);
+		take_dongle(coder->left_dongle, coder);
+		take_dongle(coder->right_dongle, coder);
 	}
 	else
 	{
-		take_dongle(&(coder->right_dongle), coder);
-		take_dongle(&(coder->left_dongle), coder);
+		take_dongle(coder->right_dongle, coder);
+		take_dongle(coder->left_dongle, coder);
 	}
 }
 void	fifo(t_dongle *dongle, t_coder *coder)
@@ -45,7 +45,6 @@ void	fifo(t_dongle *dongle, t_coder *coder)
 void	edf(t_dongle *dongle, t_coder *coder)
 {
 	long long	time;
-	long long	dead_time;
 	deque		*current;
 	deque		*prev;
 
@@ -54,10 +53,10 @@ void	edf(t_dongle *dongle, t_coder *coder)
 	{
 		if (!dongle->head)
 		{
-			ft_lstadd_back(dongle->head, coder);
+			ft_lstadd_back(dongle->head, ft_lstnew(coder));
 			return ;
 		}
-		current = dongle->head;
+		current = *(dongle->head);
 		prev = NULL;
 		while (current)
 		{
@@ -76,6 +75,7 @@ void	edf(t_dongle *dongle, t_coder *coder)
 			current = current->next;
 		}
 	}
+	ft_lstadd_back(dongle->head, ft_lstnew(coder));
 	return ;
 }
 
@@ -91,7 +91,7 @@ int	compare_last_compile(t_coder *coder1, t_coder *coder2, long long time)
 
 int	add_dongle_que(t_dongle *dongle, t_coder *coder)
 {
-	if (coder->data->scheduler == "fifo")
+	if (strcmp(coder->data->scheduler, "fifo") == 0)
 	{
 		fifo(dongle, coder);
 	}
@@ -104,14 +104,16 @@ int	add_dongle_que(t_dongle *dongle, t_coder *coder)
 
 int	first_deque_coder(t_dongle *dongle, t_coder *coder)
 {
-	if (*dongle->head->coder->id == coder->id)
-	{
-		ft_delete_list(dongle->head);
-		return (1);
-	}
-	else
+	if (*(dongle->head) == NULL)
 	{
 		add_dongle_que(dongle, coder);
 		return (0);
 	}
+	if ((*(dongle->head))->coder->id == coder->id)
+	{
+		ft_delete_list(dongle->head);
+		return (1);
+	}
+	add_dongle_que(dongle, coder);
+	return (0);
 }

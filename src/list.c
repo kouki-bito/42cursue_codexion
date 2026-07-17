@@ -33,7 +33,7 @@ void	ft_delete_list(deque **lst)
 	deque	*currect;
 
 	currect = *lst;
-	lst = currect->next;
+	*lst = currect->next;
 	free(currect);
 }
 
@@ -69,7 +69,7 @@ int	ft_find_coder(deque **head, t_coder *coder)
 	deque *current;
 	if (!head)
 		return (0);
-	current = head;
+	current = *head;
 	while (current)
 	{
 		if (current->coder->id == coder->id)

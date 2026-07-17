@@ -14,17 +14,24 @@ int	main(int argc, char *argv[])
 	{
 		return (0);
 	}
-	if (!init_dongle(&data)&&!init_coder(&data))
+	if (!init_dongle(&data)||!init_coder(&data))
 		destroy_all(&data);
 	while(i < data.number_of_coders)
 	{
 		if(pthread_create(&(data.coder[i].thread), NULL, &coder_routine,
 			&(data.coder[i])))
 			destroy_all(&data);
+
+		i++;
+	}
+	i=0;
+	while (i < data.number_of_coders)
+	{
 		if(pthread_join(data.coder[i].thread, NULL))
 			destroy_all(&data);
 		i++;
 	}
+	
 	destroy_all(&data);
 	return 0;
 }

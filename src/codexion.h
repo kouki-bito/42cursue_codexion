@@ -92,7 +92,7 @@ void							*execute_safely(pthread_mutex_t *mutex,
 									void *(*func)(t_coder *), t_coder *argv);
 void							*take(t_coder *argv);
 void							take_dongles(t_coder *coder);
-void							take_dongle(t_dongle *dongle, t_data *data);
+void							take_dongle(t_dongle *dongle, t_coder *coder);
 long long						get_time_ms(void);
 void							action_usleep(long long time, t_coder *coder);
 
@@ -103,4 +103,21 @@ void							destroy_all(t_data *data);
 deque							*ft_lstnew(t_coder *coder);
 int								ft_find_coder(deque **head, t_coder *coder);
 void							ft_lstadd_front(deque **lst, deque *new);
-void	*coder_routine(void *arg)
+void							*coder_routine(void *arg);
+int								ft_atoi_safe(char *str);
+int								init_mutex_and_cond(t_data *data);
+int								compare_last_compile(t_coder *coder1,
+									t_coder *coder2, long long time);
+int								check_dead(t_coder *coders);
+int								is_simulation_ended(t_data *data);
+struct timespec					get_time(void);
+long long						get_time_ms(void);
+struct timespec					get_interval_time(long int time);
+void							leave_dongle(t_coder *coder);
+void							start_compile(t_coder *coder);
+void							start_debuging(t_coder *coder);
+void							start_refactor(t_coder *coder);
+void	destroy_all(t_data *data);
+void	destroy_coder(t_coder *coder);
+void	destroy_dongle(t_dongle *dongle);
+void	destroy_deque(deque **head);
