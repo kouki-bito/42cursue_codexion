@@ -26,11 +26,11 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 }
 int	init_mutex_and_cond(t_data *data)
 {
-	if (pthread_mutex_init(&(*data).data_mutex, NULL)
-		&& pthread_mutex_init((&(*data).log_mutex), NULL)
-		&& pthread_cond_init(&(data->usleep_cond), NULL))
-		return (0);
-	return (1);
+	if (!pthread_mutex_init(&(data->data_mutex), NULL)
+		&& !pthread_mutex_init(&(data->log_mutex), NULL)
+		&& !pthread_cond_init(&(data->usleep_cond), NULL))
+		return (1);
+	return (0);
 }
 int	ft_atoi_safe(char *str)
 {

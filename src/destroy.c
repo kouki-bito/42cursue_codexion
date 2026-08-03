@@ -14,6 +14,10 @@ void	destroy_all(t_data *data)
 		destroy_dongle(&(data->dongle[i]));
 		i++;
 	}
+	free(data->dongle);
+	free(data->coder);
+
+
 }
 
 void	destroy_coder(t_coder *coder)
