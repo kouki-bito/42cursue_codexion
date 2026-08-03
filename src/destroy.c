@@ -24,7 +24,7 @@ void	destroy_coder(t_coder *coder)
 
 void	destroy_deque(deque **head)
 {
-	while (head != NULL)
+	while (*head != NULL)
 	{
 		ft_delete_list(head);
 	}
@@ -35,6 +35,6 @@ void	destroy_dongle(t_dongle *dongle)
 {
 	pthread_cond_destroy(&(dongle->cond));
 	pthread_mutex_destroy(&(dongle->mutex));
-	if (ft_lstsize(*(dongle->head)) > 0)
-		destroy_deque(dongle->head);
+	if (ft_lstsize(dongle->head) > 0)
+		destroy_deque(&dongle->head);
 }

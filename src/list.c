@@ -53,6 +53,7 @@ int	ft_lstsize(deque *lst)
 	int		length;
 	deque	*current;
 
+	// printf("entre list");
 	if (!lst)
 		return (0);
 	current = lst;
@@ -64,12 +65,12 @@ int	ft_lstsize(deque *lst)
 	}
 	return (length);
 }
-int	ft_find_coder(deque **head, t_coder *coder)
+int	ft_find_coder(deque *head, t_coder *coder)
 {
 	deque *current;
 	if (!head)
 		return (0);
-	current = *head;
+	current = head;
 	while (current)
 	{
 		if (current->coder->id == coder->id)

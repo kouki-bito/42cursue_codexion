@@ -39,7 +39,7 @@ void	take_dongles(t_coder *coder)
 void	fifo(t_dongle *dongle, t_coder *coder)
 {
 	if (!ft_find_coder(dongle->head, coder))
-		ft_lstadd_back(dongle->head, ft_lstnew(coder));
+		ft_lstadd_back(&dongle->head, ft_lstnew(coder));
 	return ;
 }
 void	edf(t_dongle *dongle, t_coder *coder)
@@ -53,10 +53,10 @@ void	edf(t_dongle *dongle, t_coder *coder)
 	{
 		if (!dongle->head)
 		{
-			ft_lstadd_back(dongle->head, ft_lstnew(coder));
+			ft_lstadd_back(&(dongle->head), ft_lstnew(coder));
 			return ;
 		}
-		current = *(dongle->head);
+		current = dongle->head;
 		prev = NULL;
 		while (current)
 		{
@@ -64,7 +64,7 @@ void	edf(t_dongle *dongle, t_coder *coder)
 			{
 				if (prev == NULL)
 				{
-					ft_lstadd_front(dongle->head, ft_lstnew(coder));
+					ft_lstadd_front(&(dongle->head), ft_lstnew(coder));
 					return ;
 				}
 				prev->next = ft_lstnew(coder);
@@ -75,7 +75,7 @@ void	edf(t_dongle *dongle, t_coder *coder)
 			current = current->next;
 		}
 	}
-	ft_lstadd_back(dongle->head, ft_lstnew(coder));
+	ft_lstadd_back(&(dongle->head), ft_lstnew(coder));
 	return ;
 }
 
@@ -104,14 +104,14 @@ int	add_dongle_que(t_dongle *dongle, t_coder *coder)
 
 int	first_deque_coder(t_dongle *dongle, t_coder *coder)
 {
-	if (*(dongle->head) == NULL)
+	if (dongle->head == NULL)
 	{
 		add_dongle_que(dongle, coder);
 		return (0);
 	}
-	if ((*(dongle->head))->coder->id == coder->id)
+	if ((dongle->head)->coder->id == coder->id)
 	{
-		ft_delete_list(dongle->head);
+		ft_delete_list(&dongle->head);
 		return (1);
 	}
 	add_dongle_que(dongle, coder);

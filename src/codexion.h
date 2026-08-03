@@ -58,7 +58,7 @@ struct							s_dongle
 	pthread_cond_t				cond;
 	int							last_compile;
 	int							take_in_use;
-	deque						**head;
+	deque						*head;
 };
 
 struct							s_coder
@@ -101,7 +101,7 @@ void							ft_lstadd_back(deque **lst, deque *new);
 int								ft_lstsize(deque *lst);
 void							destroy_all(t_data *data);
 deque							*ft_lstnew(t_coder *coder);
-int								ft_find_coder(deque **head, t_coder *coder);
+int								ft_find_coder(deque *head, t_coder *coder);
 void							ft_lstadd_front(deque **lst, deque *new);
 void							*coder_routine(void *arg);
 int								ft_atoi_safe(char *str);
