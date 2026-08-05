@@ -13,6 +13,7 @@ static void	execute_coder_cycle(t_coder *coder)
 {
 	take_dongles(coder);
 	start_compile(coder);
+	leave_dongle(coder);
 	start_debuging(coder);
 	start_refactor(coder);
 }

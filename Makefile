@@ -2,6 +2,7 @@ NAME        = codexion
 
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
+DEBUG_FLAGS = -g3 -O0
 
 PTHREAD     = -pthread
 
@@ -36,5 +37,7 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+debug: fclean
+	$(MAKE) CFLAGS=" $(DEBUG_FLAGS)" all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re debug

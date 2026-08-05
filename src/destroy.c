@@ -5,6 +5,8 @@ void	destroy_all(t_data *data)
 	int	i;
 
 	i = 0;
+	if(!data)
+		return ;
 	pthread_cond_destroy(&(data->usleep_cond));
 	pthread_mutex_destroy(&(data->log_mutex));
 	pthread_mutex_destroy(&(data->data_mutex));
@@ -14,15 +16,19 @@ void	destroy_all(t_data *data)
 		destroy_dongle(&(data->dongle[i]));
 		i++;
 	}
+	
 	free(data->dongle);
 	free(data->coder);
+	free(data);
 
 
 }
 
 void	destroy_coder(t_coder *coder)
 {
-	pthread_mutex_destroy(&(coder->coder_mutex));
+	if(!coder)
+		pthread_mutex_destroy(&(coder->coder_mutex));
+	if(!coder)
 	pthread_mutex_destroy(&(coder->coder_task_mutex));
 }
 

@@ -104,10 +104,10 @@ int	add_dongle_que(t_dongle *dongle, t_coder *coder)
 
 int	first_deque_coder(t_dongle *dongle, t_coder *coder)
 {
-	if (dongle->head == NULL)
+	if (dongle->head == NULL && dongle->take_in_use)
 	{
 		add_dongle_que(dongle, coder);
-		return (0);
+		return (1);
 	}
 	if ((dongle->head)->coder->id == coder->id)
 	{
