@@ -1,6 +1,8 @@
 #include "codexion.h"
 
 long long		get_time_ms(void);
+int check_count_compile(t_coder* coder);
+
 static int	check_simulation_status(t_coder *coder)
 {
 	int	ended;
@@ -23,11 +25,19 @@ void	*coder_routine(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	while (!check_simulation_status(coder))
+	while (!check_simulation_status(coder) && !check_count_compile(coder))
 	{
 		execute_coder_cycle(coder);
 	}
 	return (NULL);
+}
+int check_count_compile(t_coder* coder)
+{
+	int count;
+	pthread_mutex_lock(&coder->coder_mutex);
+	count = coder->count_compile;
+	pthread_mutex_unlock(&coder->coder_mutex);
+	return count>=coder->data->number_of_compiles_required;
 }
 
 int	is_simulation_ended(t_data *data)
@@ -76,24 +86,34 @@ struct timespec	get_interval_time(long int time)
 }
 void	leave_dongle(t_coder *coder)
 {
+	long long time;
+	time = get_time_ms();
 	pthread_mutex_lock(&(coder->left_dongle->mutex));
 	coder->left_dongle->take_in_use = 0;
+	coder->left_dongle->last_compile=time;
 	pthread_mutex_unlock(&(coder->left_dongle->mutex));
 	pthread_mutex_lock(&(coder->right_dongle->mutex));
 	coder->right_dongle->take_in_use = 0;
+	coder->right_dongle->last_compile=time;
 	pthread_mutex_unlock(&(coder->right_dongle->mutex));
 	pthread_cond_broadcast(&coder->right_dongle->cond);
 	pthread_cond_broadcast(&coder->left_dongle->cond);
 }
 void	start_compile(t_coder *coder)
 {
+	long long time = get_time_ms();
 	if (!check_simulation_status(coder))
 	{
-		printf("%lld %d is compiling", get_time_ms(), coder->id);
+		pthread_mutex_lock(&coder->coder_mutex);
+		coder->last_compile = time;
+		pthread_mutex_unlock(&coder->coder_mutex);
+		printf("%lld %d is compiling", time, coder->id);
 		action_usleep(coder->data->time_to_compile, coder);
 		pthread_mutex_lock(&coder->coder_mutex);
-		coder->last_compile = get_time_ms();
-		coder->count_compile += 1;
+		pthread_mutex_lock(&coder->data->data_mutex);
+		if(!coder->data->is_simulation_ended)
+			coder->count_compile += 1;
+		pthread_mutex_unlock(&coder->data->data_mutex);
 		pthread_mutex_unlock(&coder->coder_mutex);
 	}
 }
@@ -120,9 +140,9 @@ void	action_usleep(long long time, t_coder *coder)
 	ts = get_interval_time(time);
 	if (!check_simulation_status(coder))
 	{
-		pthread_mutex_lock(&coder->coder_task_mutex);
+		pthread_mutex_lock(&coder->data->usleep_mutex);
 		pthread_cond_timedwait(&(coder->data->usleep_cond),
-			&(coder->coder_task_mutex), &ts);
-		pthread_mutex_unlock(&coder->coder_task_mutex);
+			&coder->data->usleep_mutex, &ts);
+		pthread_mutex_unlock(&coder->data->usleep_mutex);
 	}
 }

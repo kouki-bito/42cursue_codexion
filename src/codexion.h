@@ -39,6 +39,7 @@ struct							s_data
 	long long					start_time;
 	pthread_mutex_t				log_mutex;
 	pthread_mutex_t				data_mutex;
+	pthread_mutex_t				usleep_mutex;
 	pthread_cond_t				usleep_cond;
 	t_coder						*coder;
 	t_dongle					*dongle;

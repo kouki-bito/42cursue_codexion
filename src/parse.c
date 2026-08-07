@@ -28,7 +28,8 @@ int	init_mutex_and_cond(t_data *data)
 {
 	if (!pthread_mutex_init(&(data->data_mutex), NULL)
 		&& !pthread_mutex_init(&(data->log_mutex), NULL)
-		&& !pthread_cond_init(&(data->usleep_cond), NULL))
+		&& !pthread_cond_init(&(data->usleep_cond), NULL)
+		&& !pthread_mutex_init(&(data->usleep_mutex), NULL))
 		return (1);
 	return (0);
 }

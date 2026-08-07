@@ -37,6 +37,7 @@ int	check_dead(t_coder *coders)
 			pthread_mutex_unlock(&(coders[i].coder_mutex));
 			return (1);
 		}
+		pthread_mutex_unlock(&(coders[i].coder_mutex));
 		i++;
 	}
 	return (0);
