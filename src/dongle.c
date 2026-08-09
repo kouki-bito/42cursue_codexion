@@ -2,6 +2,7 @@
 #include "codexion.h"
 
 int		first_deque_coder(t_dongle *dongle, t_coder *coder);
+
 void	take_dongle(t_dongle *dongle, t_coder *coder)
 {
 	long long	cool_time;
@@ -24,7 +25,18 @@ void	take_dongle(t_dongle *dongle, t_coder *coder)
 	dongle->take_in_use = 1;
 	pthread_mutex_unlock(&(dongle->mutex));
 }
-
+int		try_take_dongle(t_dongle* dongle)
+{
+	int n;
+	long long time;
+	long long cool_time;
+	pthread_mutex_lock(&dongle->mutex);
+	n = dongle->take_in_use;
+	cool_time = dongle->cool_time;
+	pthread_mutex_unlock(&dongle->mutex);
+	time = get_time_ms();
+	return !n && time>= cool_time;
+}
 void	take_dongles(t_coder *coder)
 {
 	if (coder->id % 2 == 1)
@@ -38,6 +50,7 @@ void	take_dongles(t_coder *coder)
 		take_dongle(coder->left_dongle, coder);
 	}
 }
+
 void	fifo(t_dongle *dongle, t_coder *coder)
 {
 	if (!ft_find_coder(dongle->head, coder))

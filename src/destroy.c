@@ -19,7 +19,7 @@ void	destroy_all(t_data *data)
 	
 	free(data->dongle);
 	free(data->coder);
-	free(data);
+	// free(data);	
 
 
 }

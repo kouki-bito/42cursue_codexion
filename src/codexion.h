@@ -23,6 +23,7 @@ typedef struct s_dongle			t_dongle;
 typedef struct s_coder			t_coder;
 typedef struct s_deque			deque;
 typedef struct s_surveillance	t_surveillance;
+typedef struct s_heap			t_heap;
 
 /* 2. 依存関係の順序に従って構造体を定義 */
 struct							s_data
@@ -57,7 +58,8 @@ struct							s_dongle
 {
 	pthread_mutex_t				mutex;
 	pthread_cond_t				cond;
-	int							last_compile;
+	long long					last_compile;
+	long long					cool_time;
 	int							take_in_use;
 	deque						*head;
 };
@@ -69,7 +71,7 @@ struct							s_coder
 	long int					last_compile;
 	int							count_compile;
 	pthread_mutex_t				coder_mutex;
-	// coder task mutexはinit処理をしてない
+
 	pthread_mutex_t				coder_task_mutex;
 
 	t_data						*data;
@@ -81,6 +83,13 @@ struct							s_deque
 {
 	t_coder						*coder;
 	struct s_deque				*next;
+};
+struct							s_heap
+{
+	t_coder*					coders[300];
+	int							size;
+	pthread_mutex_t				lock;
+	pthread_cond_t 				cond;
 };
 
 int								ft_parse(int, char *[], t_data *);
@@ -122,3 +131,10 @@ void	destroy_all(t_data *data);
 void	destroy_coder(t_coder *coder);
 void	destroy_dongle(t_dongle *dongle);
 void	destroy_deque(deque **head);
+long long get_burn_out(t_coder* coder);
+void heap_push(t_heap* managment, t_coder* coder);
+void	test_heap(t_data *data);
+int	add_dongle_que(t_dongle *dongle, t_coder *coder);
+void heap_init(t_heap* manegment);
+void heap_pop(t_heap* manegment,t_coder* coder);
+int heap_compare(t_coder* curr,t_coder* coder);

@@ -43,9 +43,6 @@ int	init_dongle(t_data *data)
 	{
 		if (pthread_mutex_init(&(data->dongle[i].mutex), NULL))
 			return (0);
-		// printf("kbito\n");
-		if (pthread_cond_init(&(data->dongle[i].cond), NULL))
-			return (0);
 		data->dongle[i].last_compile = 0;
 		data->dongle[i].take_in_use = 0;
 		data->dongle[i].head = NULL;
@@ -54,52 +51,3 @@ int	init_dongle(t_data *data)
 	return (1);
 }
 
-// int	clean_up(t_data *data)
-// {
-// 	int	i;
-
-// 	if (!data->dongle)
-// 		return (0);
-// 	pthread_mutex_destroy(&data->data_mutex);
-// 	pthread_mutex_destroy(&data->log_mutex);
-// 	i = 0;
-// 	while (i < data->number_of_coders)
-// 	{
-// 		pthread_mutex_destroy(&data->coder[i].coder_mutex);
-// 		i++;
-// 	}
-// 	free(data->coder);
-// 	clean_dongle(data);
-// 	return (1);
-// }
-
-// int	clean_dongle(t_data *data)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < data->number_of_coders)
-// 	{
-// 		pthread_mutex_destroy(&(data->dongle[i].mutex));
-// 		pthread_cond_destroy(&(data->dongle[i].cond));
-// 		if (data->dongle[i].head)
-// 			free_que((data->dongle[i].head));
-// 		i++;
-// 	}
-// 	free(data->dongle);
-// 	return (1);
-// }
-
-// // void	free_que(deque **head)
-// // {
-// // 	deque	*tmp;
-// // 	deque	*current;
-
-// // 	current = *head;
-// // 	while (current)
-// // 	{
-// // 		tmp = current->next;
-// // 		free(current);
-// // 		current = tmp;
-// // 	}
-// // }

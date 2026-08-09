@@ -12,11 +12,15 @@ SRCS        = main.c \
 			  src/dongle.c\
 			  src/list.c\
 			  src/monitor.c\
-			  src/mutex_utilis.c\
 			  src/sort.c\
 			  src/thread_routing.c\
 			  src/time_utilis.c \
-			  src/destroy.c
+			  src/destroy.c \
+			  src/setter.c\
+			  src/heap.c\
+			  src/getter.c\
+			  src/log.c\
+			  src/debug.c
 
 			 
 
