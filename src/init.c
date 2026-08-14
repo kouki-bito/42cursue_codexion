@@ -15,7 +15,6 @@ int	init_coder(t_data *data)
 	while (i < data->number_of_coders)
 	{
 		data->coder[i].last_compile = 0;
-
 		data->coder[i].id = i + 1;
 		data->coder[i].left_dongle = &data->dongle[i];
 		data->coder[i].right_dongle = &data->dongle[(i + 1)
@@ -43,11 +42,13 @@ int	init_dongle(t_data *data)
 	{
 		if (pthread_mutex_init(&(data->dongle[i].mutex), NULL))
 			return (0);
+		if (pthread_mutex_init(&(data->dongle[i].scheduler_mutex), NULL))
+			return (0);
 		data->dongle[i].last_compile = 0;
 		data->dongle[i].take_in_use = 0;
 		data->dongle[i].head = NULL;
+		data->dongle[i].id = i;
 		i++;
 	}
 	return (1);
 }
-

@@ -20,7 +20,9 @@ SRCS        = main.c \
 			  src/heap.c\
 			  src/getter.c\
 			  src/log.c\
-			  src/debug.c
+			  src/debug.c \
+			  src/check_time.c\
+			  src/check_simulation.c\
 
 			 
 

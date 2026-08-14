@@ -4,7 +4,7 @@
 
 void	*routing(void *argv);
 
-
+void print_coder_dongle(t_coder* coder,int size);
 int	main(int argc, char *argv[])
 {
 	t_data	data;
@@ -19,12 +19,23 @@ int	main(int argc, char *argv[])
 	if(!init_coder(&data))
 		destroy_coder(data.coder);
 	// printf("hehe");
-	test_heap(&data);
+	// test_heap(&data);
+	print_coder_dongle(data.coder,data.number_of_coders);
 	
 	destroy_all(&data);
 	return 0;
 }
-
+void print_coder_dongle(t_coder* coder,int size)
+{
+	int i;
+	i = 0;
+	while (i < size)
+	{
+		printf("oder id:%d has left dongle:%d and right dongle:%d\n",coder[i].id,coder[i].left_dongle->id,coder[i].right_dongle->id);
+		i++;c
+	}
+	
+}
 
 // void test_monitor(t_data* data)
 // {

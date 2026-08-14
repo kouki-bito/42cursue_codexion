@@ -57,10 +57,12 @@ struct							s_condtion
 struct							s_dongle
 {
 	pthread_mutex_t				mutex;
+	pthread_mutex_t				scheduler_mutex;
 	pthread_cond_t				cond;
 	long long					last_compile;
 	long long					cool_time;
 	int							take_in_use;
+	int							id;
 	deque						*head;
 };
 
@@ -86,10 +88,10 @@ struct							s_deque
 };
 struct							s_heap
 {
-	t_coder*					coders[300];
+	t_coder						*coders[300];
 	int							size;
 	pthread_mutex_t				lock;
-	pthread_cond_t 				cond;
+	pthread_cond_t				cond;
 };
 
 int								ft_parse(int, char *[], t_data *);
@@ -97,12 +99,13 @@ int								ft_is_num(char[]);
 int								ft_check_format(char *[]);
 int								init_coder(t_data *data);
 int								init_dongle(t_data *data);
-int								clean_up(t_data *data);
+// int								clean_up(t_data *data);
 void							*execute_safely(pthread_mutex_t *mutex,
 									void *(*func)(t_coder *), t_coder *argv);
-void							*take(t_coder *argv);
+// void							*take(t_coder *argv);
 void							take_dongles(t_coder *coder);
-void							take_dongle(t_dongle *dongle, t_coder *coder);
+int								take_dongle(t_dongle *first, t_dongle *second,
+									t_coder *coder);
 long long						get_time_ms(void);
 void							action_usleep(long long time, t_coder *coder);
 
@@ -127,14 +130,16 @@ void							leave_dongle(t_coder *coder);
 void							start_compile(t_coder *coder);
 void							start_debuging(t_coder *coder);
 void							start_refactor(t_coder *coder);
-void	destroy_all(t_data *data);
-void	destroy_coder(t_coder *coder);
-void	destroy_dongle(t_dongle *dongle);
-void	destroy_deque(deque **head);
-long long get_burn_out(t_coder* coder);
-void heap_push(t_heap* managment, t_coder* coder);
-void	test_heap(t_data *data);
-int	add_dongle_que(t_dongle *dongle, t_coder *coder);
-void heap_init(t_heap* manegment);
-void heap_pop(t_heap* manegment,t_coder* coder);
-int heap_compare(t_coder* curr,t_coder* coder);
+void							destroy_all(t_data *data);
+void							destroy_coder(t_coder *coder);
+void							destroy_dongle(t_dongle *dongle);
+void							destroy_deque(deque **head);
+long long						get_burn_out(t_coder *coder);
+void							heap_push(t_heap *managment, t_coder *coder);
+void							test_heap(t_data *data);
+int								add_dongle_que(t_dongle *dongle,
+									t_coder *coder);
+void							heap_init(t_heap *manegment);
+void							heap_pop(t_heap *manegment, t_coder *coder);
+int								heap_compare(t_coder *curr, t_coder *coder);
+int								check_simulation_status(t_coder *coder);
