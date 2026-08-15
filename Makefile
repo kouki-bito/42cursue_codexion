@@ -23,6 +23,7 @@ SRCS        = main.c \
 			  src/debug.c \
 			  src/check_time.c\
 			  src/check_simulation.c\
+			  src/create_thread.c
 
 			 
 

@@ -54,7 +54,13 @@ struct							s_condtion
 	int							debuging;
 	int							recatoring;
 };
-
+struct							s_heap
+{
+	t_coder						*coders[300];
+	int							size;
+	pthread_mutex_t				lock;
+	pthread_cond_t				cond;
+};
 struct							s_dongle
 {
 	pthread_mutex_t				mutex;
@@ -89,13 +95,7 @@ struct							s_deque
 	t_coder						*coder;
 	struct s_deque				*next;
 };
-struct							s_heap
-{
-	t_coder						*coders[300];
-	int							size;
-	pthread_mutex_t				lock;
-	pthread_cond_t				cond;
-};
+
 
 int								ft_parse(int, char *[], t_data *);
 int								ft_is_num(char[]);
@@ -107,8 +107,7 @@ void							*execute_safely(pthread_mutex_t *mutex,
 									void *(*func)(t_coder *), t_coder *argv);
 // void							*take(t_coder *argv);
 void							take_dongles(t_coder *coder);
-int								take_dongle(t_dongle *first, t_dongle *second,
-									t_coder *coder);
+int								take_dongle(t_dongle *first, t_dongle *second);
 long long						get_time_ms(void);
 void							action_usleep(long long time, t_coder *coder);
 
@@ -151,5 +150,8 @@ void							set_dongle_use(t_dongle *first,
 									t_dongle *second, int use);
 void							set_dongle_cool_time(t_dongle *first,
 									t_dongle *second, long long cool_time);
-int								heap_first(t_heap *heap, t_coder *coder);
-int								monitor(void *pointer);
+int								heap_first(t_dongle* dongle, t_coder *coder);
+void*								monitor(void *pointer);
+void	print_log(t_data *data, t_coder *coder, char *action);
+void	init_thread(t_data *data);
+void	join_thread(t_data *data);

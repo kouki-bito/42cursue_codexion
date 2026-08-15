@@ -1,6 +1,6 @@
 #include "codexion.h"
 
-int	monitor(void *pointer)
+void*	monitor(void *pointer)
 {
 	t_coder	*coders;
 
@@ -13,7 +13,7 @@ int	monitor(void *pointer)
 			coders[0].data->is_simulation_ended = 1;
 			pthread_mutex_unlock(&(coders[0].data->data_mutex));
 			pthread_cond_broadcast(&coders[0].data->usleep_cond);
-			return (1);
+			return (void*)(1);
 		}
 	}
 }

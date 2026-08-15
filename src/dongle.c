@@ -3,6 +3,16 @@
 #define ACT_COMPILE "%d"
 
 void	scheduler_fifo(t_dongle *first, t_dongle *second, t_coder *coder);
+void	scheduler_edf(t_dongle *first, t_dongle *second, t_coder *coder);
+void	add_both_coder_heap(t_dongle *first, t_dongle *second, t_coder *coder);
+void	delete_both_coder_heap(t_dongle *first, t_dongle *second,
+		t_coder *coder);
+void	cool_time_sleep(t_dongle *first, t_dongle *second, t_coder *coder);
+void	add_deque_coder(t_dongle *dongle, t_coder *coder);
+int	try_take_dongle(t_dongle *dongle);
+
+void	add_both_deque_coder(t_dongle *first, t_dongle *second, t_coder *coder);
+int	fisrt_deque_coder(t_coder *coder, t_dongle *dongle);
 void	take_dongles(t_coder *coder)
 {
 	t_dongle	*first;
@@ -50,7 +60,7 @@ void	scheduler_fifo(t_dongle *first, t_dongle *second, t_coder *coder)
 	{
 		if (fisrt_deque_coder(coder, first) && fisrt_deque_coder(coder, second))
 		{
-			if (take_dongle(first, second, coder))
+			if (take_dongle(first, second))
 			{
 				print_log(coder->data, coder, "take", first);
 				print_log(coder->data, coder, "take", second);
@@ -73,7 +83,7 @@ void	scheduler_edf(t_dongle *first, t_dongle *second, t_coder *coder)
 	{
 		if (heap_first(&first->heap, coder) && heap_first(&second->heap, coder))
 		{
-			if (take_dongle(first, second, coder))
+			if (take_dongle(first, second))
 			{
 				print_log(coder->data, coder, "take", first);
 				print_log(coder->data, coder, "take", second);
@@ -125,7 +135,7 @@ void	cool_time_sleep(t_dongle *first, t_dongle *second, t_coder *coder)
 	action_usleep(set_time, coder);
 }
 
-int	take_dongle(t_dongle *first, t_dongle *second, t_coder *coder)
+int	take_dongle(t_dongle *first, t_dongle *second)
 {
 	if (try_take_dongle(first))
 	{

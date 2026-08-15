@@ -18,8 +18,7 @@ int	main(int argc, char *argv[])
 		destroy_dongle(data.dongle);
 	if(!init_coder(&data))
 		destroy_coder(data.coder);
-	// printf("hehe");
-	// test_heap(&data);
+	
 	print_coder_dongle(data.coder,data.number_of_coders);
 	
 	destroy_all(&data);

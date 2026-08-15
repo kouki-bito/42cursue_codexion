@@ -35,7 +35,6 @@ int	check_count_compile(t_coder *coder)
 
 void	leave_dongle(t_coder *coder)
 {
-	long long	time;
 
 	if (check_simulation_status(coder))
 		return ;
@@ -43,6 +42,7 @@ void	leave_dongle(t_coder *coder)
 	set_dongle_cool_time(coder->right_dongle, coder->left_dongle,
 		coder->data->dongle_cooldown);
 }
+
 void	start_compile(t_coder *coder)
 {
 	long long	time;
