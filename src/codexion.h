@@ -42,6 +42,7 @@ struct							s_data
 	pthread_mutex_t				data_mutex;
 	pthread_mutex_t				usleep_mutex;
 	pthread_cond_t				usleep_cond;
+	pthread_t					monitor;
 	t_coder						*coder;
 	t_dongle					*dongle;
 };
@@ -58,11 +59,13 @@ struct							s_dongle
 {
 	pthread_mutex_t				mutex;
 	pthread_mutex_t				scheduler_mutex;
+	pthread_mutex_t				cool_down_mutex;
 	pthread_cond_t				cond;
 	long long					last_compile;
 	long long					cool_time;
 	int							take_in_use;
 	int							id;
+	t_heap						heap;
 	deque						*head;
 };
 
@@ -143,3 +146,10 @@ void							heap_init(t_heap *manegment);
 void							heap_pop(t_heap *manegment, t_coder *coder);
 int								heap_compare(t_coder *curr, t_coder *coder);
 int								check_simulation_status(t_coder *coder);
+long long						get_dongle_cool_time(t_dongle *dongle);
+void							set_dongle_use(t_dongle *first,
+									t_dongle *second, int use);
+void							set_dongle_cool_time(t_dongle *first,
+									t_dongle *second, long long cool_time);
+int								heap_first(t_heap *heap, t_coder *coder);
+int								monitor(void *pointer);

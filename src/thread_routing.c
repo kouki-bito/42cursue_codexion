@@ -37,17 +37,11 @@ void	leave_dongle(t_coder *coder)
 {
 	long long	time;
 
-	time = get_time_ms();
-	pthread_mutex_lock(&(coder->left_dongle->mutex));
-	coder->left_dongle->take_in_use = 0;
-	coder->left_dongle->last_compile = time;
-	pthread_mutex_unlock(&(coder->left_dongle->mutex));
-	pthread_mutex_lock(&(coder->right_dongle->mutex));
-	coder->right_dongle->take_in_use = 0;
-	coder->right_dongle->last_compile = time;
-	pthread_mutex_unlock(&(coder->right_dongle->mutex));
-	pthread_cond_broadcast(&coder->right_dongle->cond);
-	pthread_cond_broadcast(&coder->left_dongle->cond);
+	if (check_simulation_status(coder))
+		return ;
+	set_dongle_use(coder->right_dongle, coder->left_dongle, 0);
+	set_dongle_cool_time(coder->right_dongle, coder->left_dongle,
+		coder->data->dongle_cooldown);
 }
 void	start_compile(t_coder *coder)
 {

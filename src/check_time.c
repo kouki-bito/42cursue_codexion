@@ -38,13 +38,27 @@ struct timespec	get_interval_time(long int time)
 }
 void	action_usleep(long long time, t_coder *coder)
 {
-	struct timespec ts;
-	ts = get_interval_time(time);
-	if (!check_simulation_status(coder))
+	struct timespec	ts;
+
+	if (time != 0)
 	{
-		pthread_mutex_lock(&coder->data->usleep_mutex);
-		pthread_cond_timedwait(&(coder->data->usleep_cond),
-			&coder->data->usleep_mutex, &ts);
-		pthread_mutex_unlock(&coder->data->usleep_mutex);
+		ts = get_interval_time(time);
+		if (!check_simulation_status(coder))
+		{
+			pthread_mutex_lock(&coder->data->usleep_mutex);
+			pthread_cond_timedwait(&(coder->data->usleep_cond),
+				&coder->data->usleep_mutex, &ts);
+			pthread_mutex_unlock(&coder->data->usleep_mutex);
+		}
+	}
+	else
+	{
+		if (!check_simulation_status(coder))
+		{
+			pthread_mutex_lock(&coder->data->usleep_mutex);
+			pthread_cond_wait(&(coder->data->usleep_cond),
+				&coder->data->usleep_mutex);
+			pthread_mutex_unlock(&coder->data->usleep_mutex);
+		}
 	}
 }

@@ -32,7 +32,7 @@ void print_coder_dongle(t_coder* coder,int size)
 	while (i < size)
 	{
 		printf("oder id:%d has left dongle:%d and right dongle:%d\n",coder[i].id,coder[i].left_dongle->id,coder[i].right_dongle->id);
-		i++;c
+		i++;
 	}
 	
 }

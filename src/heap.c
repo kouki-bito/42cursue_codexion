@@ -103,3 +103,14 @@ int	heap_compare(t_coder *curr, t_coder *coder)
 {
 	return (get_burn_out(curr) < get_burn_out(coder));
 }
+
+int	heap_first(t_dongle *dongle, t_coder *coder)
+{
+	int	flag;
+
+	pthread_mutex_lock(&dongle->scheduler_mutex);
+	if (dongle->heap.size > 0)
+		flag = dongle->heap.coders[0] == coder;
+	pthread_mutex_unlock(&dongle->scheduler_mutex);
+	return (flag);
+}

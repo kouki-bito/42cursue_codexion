@@ -44,6 +44,8 @@ int	init_dongle(t_data *data)
 			return (0);
 		if (pthread_mutex_init(&(data->dongle[i].scheduler_mutex), NULL))
 			return (0);
+		if (pthread_mutex_init(&(data->dongle[i].cool_down_mutex), NULL))
+			return (0);
 		data->dongle[i].last_compile = 0;
 		data->dongle[i].take_in_use = 0;
 		data->dongle[i].head = NULL;

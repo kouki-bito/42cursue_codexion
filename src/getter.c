@@ -20,6 +20,15 @@ t_coder	*get_heap_first(t_heap *heap)
 	pthread_mutex_unlock(&heap->lock);
 	return (coder);
 }
+long long	get_dongle_cool_time(t_dongle *dongle)
+{
+	long long	time;
+
+	pthread_mutex_lock(&dongle->cool_down_mutex);
+	time = dongle->cool_time;
+	pthread_mutex_unlock(&dongle->cool_down_mutex);
+	return (time);
+}
 int	is_simulation_ended(t_data *data)
 {
 	int end;
