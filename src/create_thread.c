@@ -14,7 +14,7 @@ void	init_thread(t_data *data)
 				&(data->coder[i])))
 		{
 			destroy_all(data);
-			return;
+			return ;
 		}
 		i++;
 	}

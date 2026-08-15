@@ -38,6 +38,7 @@ struct							s_data
 	char						*scheduler;
 	int							is_simulation_ended;
 	long long					start_time;
+	int							start_flag;
 	pthread_mutex_t				log_mutex;
 	pthread_mutex_t				data_mutex;
 	pthread_mutex_t				usleep_mutex;
@@ -96,7 +97,6 @@ struct							s_deque
 	struct s_deque				*next;
 };
 
-
 int								ft_parse(int, char *[], t_data *);
 int								ft_is_num(char[]);
 int								ft_check_format(char *[]);
@@ -150,8 +150,9 @@ void							set_dongle_use(t_dongle *first,
 									t_dongle *second, int use);
 void							set_dongle_cool_time(t_dongle *first,
 									t_dongle *second, long long cool_time);
-int								heap_first(t_dongle* dongle, t_coder *coder);
-void*								monitor(void *pointer);
-void	print_log(t_data *data, t_coder *coder, char *action);
-void	init_thread(t_data *data);
-void	join_thread(t_data *data);
+int								heap_first(t_dongle *dongle, t_coder *coder);
+void							*monitor(void *pointer);
+void							print_log(t_data *data, t_coder *coder,
+									char *action);
+void							init_thread(t_data *data);
+void							join_thread(t_data *data);

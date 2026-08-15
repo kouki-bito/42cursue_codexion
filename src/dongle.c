@@ -6,13 +6,13 @@ void	scheduler_fifo(t_dongle *first, t_dongle *second, t_coder *coder);
 void	scheduler_edf(t_dongle *first, t_dongle *second, t_coder *coder);
 void	add_both_coder_heap(t_dongle *first, t_dongle *second, t_coder *coder);
 void	delete_both_coder_heap(t_dongle *first, t_dongle *second,
-		t_coder *coder);
+			t_coder *coder);
 void	cool_time_sleep(t_dongle *first, t_dongle *second, t_coder *coder);
 void	add_deque_coder(t_dongle *dongle, t_coder *coder);
-int	try_take_dongle(t_dongle *dongle);
+int		try_take_dongle(t_dongle *dongle);
 
 void	add_both_deque_coder(t_dongle *first, t_dongle *second, t_coder *coder);
-int	fisrt_deque_coder(t_coder *coder, t_dongle *dongle);
+int		fisrt_deque_coder(t_coder *coder, t_dongle *dongle);
 void	take_dongles(t_coder *coder)
 {
 	t_dongle	*first;
@@ -62,8 +62,8 @@ void	scheduler_fifo(t_dongle *first, t_dongle *second, t_coder *coder)
 		{
 			if (take_dongle(first, second))
 			{
-				print_log(coder->data, coder, "take", first);
-				print_log(coder->data, coder, "take", second);
+				print_log(coder->data, coder, "take");
+				print_log(coder->data, coder, "take");
 				set_dongle_use(first, second, 1);
 				delete_stack(first, second, coder->data->scheduler, coder);
 				break ;

@@ -17,6 +17,7 @@ void	*coder_routine(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
+	wait_for_start(coder);
 	while (!check_simulation_status(coder) && !check_count_compile(coder))
 	{
 		execute_coder_cycle(coder);
@@ -32,10 +33,15 @@ int	check_count_compile(t_coder *coder)
 	pthread_mutex_unlock(&coder->coder_mutex);
 	return (count <= coder->data->number_of_compiles_required);
 }
-
+void	wait_for_start(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->data->data_mutex);
+	coder->data->start_flag = coder->data->start_flag || 1 << coder->id;
+	pthread_mutex_unlock(&coder->data->data_mutex);
+	action_usleep(0, coder);
+}
 void	leave_dongle(t_coder *coder)
 {
-
 	if (check_simulation_status(coder))
 		return ;
 	set_dongle_use(coder->right_dongle, coder->left_dongle, 0);

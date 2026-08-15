@@ -9,7 +9,7 @@ void	print_log(t_data *data, t_coder *coder, char *action)
 	time = get_time_ms() - data->start_time;
 	if (strcmp(action, "take") == 0)
 		printf("%lld %d has taken a dongle", time, coder->id);
-	else if (strcmp(action, "compile") ==0)
+	else if (strcmp(action, "compile") == 0)
 		printf("%lld %d is compiling", time, coder->id);
 	else if (strcmp(action, "debug") == 0)
 		printf("%lld %d is debugging", time, coder->id);

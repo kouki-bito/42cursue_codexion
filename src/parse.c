@@ -14,6 +14,8 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 	(*data).number_of_compiles_required = ft_atoi_safe(argv[6]);
 	(*data).dongle_cooldown = ft_atoi_safe(argv[7]);
 	(*data).scheduler = argv[8];
+	(*data).start_flag = 0;
+	(*data).start_time = 0;
 	if ((*data).number_of_coders == -1 || (*data).time_to_burnout == -1
 		|| (*data).time_to_compile == -1 || (*data).time_to_debug == -1
 		|| (*data).time_to_refactor == -1
