@@ -156,3 +156,4 @@ void print_log(t_data *data, t_coder *coder,
 void init_thread(t_data *data);
 void join_thread(t_data *data);
 void set_burn_out(t_coder* coder,long long time);
+int check_count_compile(t_coder *coder);
