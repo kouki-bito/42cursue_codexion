@@ -29,7 +29,7 @@ struct timespec	get_interval_time(long int time)
 	ts = get_time();
 	ts.tv_sec += time / 1000;
 	ts.tv_nsec += (time % 1000) * 1000000;
-	if (ts.tv_nsec > 1000000000)
+	if (ts.tv_nsec >= 1000000000)
 	{
 		ts.tv_sec += ts.tv_nsec / 1000000000;
 		ts.tv_nsec = ts.tv_nsec % 1000000000;

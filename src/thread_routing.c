@@ -43,9 +43,15 @@ void leave_dongle(t_coder *coder)
 {
 	if (check_simulation_status(coder))
 		return;
+	pthread_mutex_lock(&coder->right_dongle->mutex);
+	pthread_mutex_lock(&coder->left_dongle->mutex);
 	set_dongle_use(coder->right_dongle, coder->left_dongle, 0);
+	pthread_mutex_unlock(&coder->right_dongle->mutex);
+	pthread_mutex_unlock(&coder->left_dongle->mutex);
 	set_dongle_cool_time(coder->right_dongle, coder->left_dongle,
 						 coder->data->dongle_cooldown);
+	pthread_cond_broadcast(&coder->data->usleep_cond);
+
 }
 
 void start_compile(t_coder *coder)
@@ -63,7 +69,7 @@ void start_compile(t_coder *coder)
 		if (!check_simulation_status(coder))
 			coder->count_compile += 1;
 		pthread_mutex_unlock(&coder->coder_mutex);
-		pthread_cond_broadcast(&coder->data->usleep_cond);
+
 	}
 }
 void start_debuging(t_coder *coder)

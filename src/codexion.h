@@ -45,6 +45,7 @@ struct s_data
 	pthread_cond_t usleep_cond;
 	pthread_t monitor;
 	t_coder *coder;
+	t_coder* burn_coder;
 	t_dongle *dongle;
 };
 
