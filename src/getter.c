@@ -1,35 +1,35 @@
 
 #include "codexion.h"
 
-long long	get_burn_out(t_coder *coder)
+long long get_burn_out(t_coder *coder)
 {
-	long long	bourn_out;
+	long long bourn_out;
 
 	pthread_mutex_lock(&coder->coder_mutex);
-	bourn_out = coder->last_compile + coder->data->time_to_burnout;
+	bourn_out = coder->burn_out_time;
 	pthread_mutex_unlock(&coder->coder_mutex);
 	return (bourn_out);
 }
 
-t_coder	*get_heap_first(t_heap *heap)
+t_coder *get_heap_first(t_heap *heap)
 {
-	t_coder	*coder;
+	t_coder *coder;
 
 	pthread_mutex_lock(&heap->lock);
 	coder = heap->coders[0];
 	pthread_mutex_unlock(&heap->lock);
 	return (coder);
 }
-long long	get_dongle_cool_time(t_dongle *dongle)
+long long get_dongle_cool_time(t_dongle *dongle)
 {
-	long long	time;
+	long long time;
 
 	pthread_mutex_lock(&dongle->cool_down_mutex);
 	time = dongle->cool_time;
 	pthread_mutex_unlock(&dongle->cool_down_mutex);
 	return (time);
 }
-int	is_simulation_ended(t_data *data)
+int is_simulation_ended(t_data *data)
 {
 	int end;
 

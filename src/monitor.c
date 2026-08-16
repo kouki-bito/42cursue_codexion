@@ -14,6 +14,7 @@ void	*monitor(void *pointer)
 		{
 			pthread_mutex_lock(&(coders[0].data->data_mutex));
 			coders[0].data->is_simulation_ended = 1;
+
 			pthread_mutex_unlock(&(coders[0].data->data_mutex));
 			pthread_cond_broadcast(&coders[0].data->usleep_cond);
 			return (void *)(1);
@@ -30,8 +31,8 @@ void	wait_coders(t_data *data)
 		{
 			pthread_mutex_lock(&data->data_mutex);
 			data->start_time = get_time_ms();
-			printf("%lld\n",data->start_time);
-			pthread_mutex_lock(&data->data_mutex);
+			printf("monitor %lld\n",data->start_time);
+			pthread_mutex_unlock(&data->data_mutex);
 			pthread_cond_broadcast(&data->usleep_cond);
 			break ;
 		}
@@ -62,19 +63,21 @@ int	check_dead(t_coder *coders)
 {
 	int			i;
 	long long	time;
-	long long	burn_out;
+	long long	now;
+
 
 	i = 0;
-	burn_out = coders[i].data->time_to_burnout;
 	while (i < coders[0].data->number_of_coders)
 	{
-		time = get_burn_out(&coders[i]);
+		time = get_burn_out(&coders[i]) - coders[0].data->start_time;
+
 		pthread_mutex_lock(&(coders[i].coder_mutex));
-		if ((time >= burn_out))
+		now = get_time_ms()-coders[0].data->start_time;
+		if ((time >= now))
 		{
-			pthread_mutex_lock(&coders[0].data->log_mutex);
-			printf("%lld %d burned out", get_time_ms(), coders[i].id);
-			pthread_mutex_unlock(&coders[0].data->log_mutex);
+			print_log(coders[0].data,&coders[i],"burn");
+
+
 			pthread_mutex_unlock(&(coders[i].coder_mutex));
 			return (1);
 		}

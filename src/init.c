@@ -2,9 +2,9 @@
 
 // int		clean_dongle(t_data *data);
 // void	free_que(deque **head);
-int	init_coder(t_data *data)
+int init_coder(t_data *data)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (data == NULL)
@@ -14,13 +14,11 @@ int	init_coder(t_data *data)
 		return (0);
 	while (i < data->number_of_coders)
 	{
-		data->coder[i].last_compile = 0;
+		data->coder[i].burn_out_time = 0;
 		data->coder[i].id = i + 1;
 		data->coder[i].left_dongle = &data->dongle[i];
-		data->coder[i].right_dongle = &data->dongle[(i + 1)
-			% data->number_of_coders];
-		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL)
-			|| pthread_mutex_init(&(data->coder[i].coder_task_mutex), NULL))
+		data->coder[i].right_dongle = &data->dongle[(i + 1) % data->number_of_coders];
+		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL) || pthread_mutex_init(&(data->coder[i].coder_task_mutex), NULL))
 		{
 			return (0);
 		}
@@ -30,9 +28,9 @@ int	init_coder(t_data *data)
 	return (1);
 }
 
-int	init_dongle(t_data *data)
+int init_dongle(t_data *data)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (!data)
@@ -46,9 +44,10 @@ int	init_dongle(t_data *data)
 			return (0);
 		if (pthread_mutex_init(&(data->dongle[i].cool_down_mutex), NULL))
 			return (0);
-		data->dongle[i].last_compile = 0;
 		data->dongle[i].take_in_use = 0;
 		data->dongle[i].head = NULL;
+		data->dongle[i].cool_time = 0;
+		data->dongle[i].heap.size = 0;
 		data->dongle[i].id = i;
 		i++;
 	}

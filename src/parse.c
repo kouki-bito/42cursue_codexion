@@ -16,6 +16,7 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 	(*data).scheduler = argv[8];
 	(*data).start_flag = 0;
 	(*data).start_time = 0;
+	(*data).is_simulation_ended = 0;
 	if ((*data).number_of_coders == -1 || (*data).time_to_burnout == -1
 		|| (*data).time_to_compile == -1 || (*data).time_to_debug == -1
 		|| (*data).time_to_refactor == -1
