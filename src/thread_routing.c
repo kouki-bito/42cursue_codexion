@@ -53,7 +53,10 @@ void start_compile(t_coder *coder)
 
 	if (!check_simulation_status(coder))
 	{
+		pthread_mutex_lock(&coder->coder_mutex);
 		set_burn_out(coder,coder->data->time_to_burnout);
+		pthread_mutex_unlock(&coder->coder_mutex);
+
 		print_log(coder->data,coder,"compile");
 		action_usleep(coder->data->time_to_compile, coder);
 		pthread_mutex_lock(&coder->coder_mutex);

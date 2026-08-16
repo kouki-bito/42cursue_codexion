@@ -39,11 +39,13 @@ struct timespec	get_interval_time(long int time)
 void	action_usleep(long long time, t_coder *coder)
 {
 	struct timespec	ts;
+	long long stime;
 
 	if (time != 0)
 	{
 		ts = get_interval_time(time);
-		if (!check_simulation_status(coder))
+		stime = get_time_ms() + time;
+		while (!check_simulation_status(coder) && get_time_ms()<stime)
 		{
 			pthread_mutex_lock(&coder->data->usleep_mutex);
 			pthread_cond_timedwait(&(coder->data->usleep_cond),

@@ -8,10 +8,8 @@ void print_coder_dongle(t_coder* coder,int size);
 int	main(int argc, char *argv[])
 {
 	t_data	data;
-	printf("sisi\n");
 	if (!ft_parse(argc, argv, &data))
 	{
-		printf("help");
 		return (0);
 	}
 	if (!init_dongle(&data))

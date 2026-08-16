@@ -46,7 +46,6 @@ void	wait_coders(t_data *data)
 		{
 			pthread_mutex_lock(&data->data_mutex);
 			data->start_time = get_time_ms();
-			printf("monitor %lld\n",data->start_time);
 			pthread_mutex_unlock(&data->data_mutex);
 			set_all_coder_time(data);
 			pthread_cond_broadcast(&data->usleep_cond);

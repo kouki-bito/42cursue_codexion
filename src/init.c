@@ -17,6 +17,7 @@ int init_coder(t_data *data)
 		data->coder[i].burn_out_time = 0;
 		data->coder[i].id = i + 1;
 		data->coder[i].left_dongle = &data->dongle[i];
+		data->coder[i].count_compile = 0;
 		data->coder[i].right_dongle = &data->dongle[(i + 1) % data->number_of_coders];
 		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL) || pthread_mutex_init(&(data->coder[i].coder_task_mutex), NULL))
 		{
