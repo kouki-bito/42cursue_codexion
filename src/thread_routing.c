@@ -2,7 +2,7 @@
 
 long long	get_time_ms(void);
 int			check_count_compile(t_coder *coder);
-
+void	wait_for_start(t_coder *coder);
 static void	execute_coder_cycle(t_coder *coder)
 {
 	take_dongles(coder);
@@ -36,7 +36,7 @@ int	check_count_compile(t_coder *coder)
 void	wait_for_start(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->data->data_mutex);
-	coder->data->start_flag = coder->data->start_flag || 1 << coder->id;
+	coder->data->start_flag = coder->data->start_flag | 1 << (coder->id-1);
 	pthread_mutex_unlock(&coder->data->data_mutex);
 	action_usleep(0, coder);
 }

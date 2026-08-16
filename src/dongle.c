@@ -81,12 +81,12 @@ void	scheduler_edf(t_dongle *first, t_dongle *second, t_coder *coder)
 	add_both_coder_heap(first, second, coder);
 	while (!is_simulation_ended(coder->data))
 	{
-		if (heap_first(&first->heap, coder) && heap_first(&second->heap, coder))
+		if (heap_first(first, coder) && heap_first(second, coder))
 		{
 			if (take_dongle(first, second))
 			{
-				print_log(coder->data, coder, "take", first);
-				print_log(coder->data, coder, "take", second);
+				print_log(coder->data, coder, "take");
+				print_log(coder->data, coder, "take");
 				set_dongle_use(first, second, 1);
 				delete_stack(first, second, coder->data->scheduler, coder);
 				break ;

@@ -19,7 +19,8 @@ int	main(int argc, char *argv[])
 	if(!init_coder(&data))
 		destroy_coder(data.coder);
 	
-	print_coder_dongle(data.coder,data.number_of_coders);
+	init_thread(&data);
+	join_thread(&data);
 	
 	destroy_all(&data);
 	return 0;

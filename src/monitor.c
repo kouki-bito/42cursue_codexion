@@ -1,10 +1,13 @@
 #include "codexion.h"
 
+int	check_start(t_data *data);
+void	wait_coders(t_data *data);
 void	*monitor(void *pointer)
 {
 	t_coder	*coders;
 
 	coders = (t_coder *)pointer;
+	wait_coders(coders[0].data);
 	while (!is_simulation_ended(coders[0].data))
 	{
 		if (check_dead(coders))
@@ -16,6 +19,8 @@ void	*monitor(void *pointer)
 			return (void *)(1);
 		}
 	}
+return (void *)(1);
+
 }
 void	wait_coders(t_data *data)
 {
@@ -25,6 +30,7 @@ void	wait_coders(t_data *data)
 		{
 			pthread_mutex_lock(&data->data_mutex);
 			data->start_time = get_time_ms();
+			printf("%lld\n",data->start_time);
 			pthread_mutex_lock(&data->data_mutex);
 			pthread_cond_broadcast(&data->usleep_cond);
 			break ;
@@ -34,15 +40,20 @@ void	wait_coders(t_data *data)
 int	check_start(t_data *data)
 {
 	int	i;
+	int flag;
+	i = 0;
 
 	pthread_mutex_lock(&data->data_mutex);
 	while (i < data->number_of_coders)
 	{
-		if (data->start_flag & 1 << i == 0)
+		flag = data->start_flag & (1 << i);
+		if (flag == 0)
 		{
 			pthread_mutex_unlock(&data->data_mutex);
+
 			return (0);
 		}
+		i++;
 	}
 	pthread_mutex_unlock(&data->data_mutex);
 	return (1);
