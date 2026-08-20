@@ -18,7 +18,7 @@ void	take_dongles(t_coder *coder)
 	t_dongle	*first;
 	t_dongle	*second;
 
-	if (coder->left_dongle->id > coder->right_dongle->id)
+	if (coder->id%2==1)
 	{
 		first = coder->right_dongle;
 		second = coder->left_dongle;
