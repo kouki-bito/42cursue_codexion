@@ -2,34 +2,34 @@
 #include "codexion.h"
 #include <stdlib.h>
 
-static void push_tester(t_heap *heap, int size, t_coder *coder);
-static void print_burn_out(t_heap *heap);
-static void pop_tester(t_heap *heap, int index);
-static void print_coder(t_coder *coder, int size);
+static void	push_tester(t_heap *heap, int size, t_coder *coder);
+static void	print_burn_out(t_heap *heap);
+static void	pop_tester(t_heap *heap, int index);
+static void	print_coder(t_coder *coder, int size);
 
-void test_heap(t_data *data)
+void	test_heap(t_data *data)
 {
-	t_heap heap;
+	t_heap	heap;
 
 	heap_init(&heap);
 	push_tester(&heap, data->number_of_coders, data->coder);
 	pop_tester(&heap, data->number_of_coders);
 }
 
-static void pop_tester(t_heap *heap, int index)
+static void	pop_tester(t_heap *heap, int index)
 {
-	t_coder *coder;
+	t_coder	*coder;
 
 	coder = heap->coders[index];
 	printf("pop test\n");
 	print_burn_out(heap);
-	printf("remove %d coder id:%d\n", index, coder->id);
+	printf("push_tester", index, coder->id);
 	heap_pop(heap, coder);
 	print_burn_out(heap);
 }
-static void push_tester(t_heap *heap, int size, t_coder *coder)
+static void	push_tester(t_heap *heap, int size, t_coder *coder)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < size)
@@ -48,21 +48,21 @@ static void push_tester(t_heap *heap, int size, t_coder *coder)
 	print_burn_out(heap);
 }
 
-static void print_burn_out(t_heap *heap)
+static void	print_burn_out(t_heap *heap)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	printf("------------------------------\n");
+	printf("-- -- -- -- -- -- -- -- -- -- -- -- -- -- --\n");
 	while (i < heap->size)
 	{
 		printf("coder id: %d was burnout:%ld\n", heap->coders[i]->id,
-			   heap->coders[i]->burn_out_time);
+			heap->coders[i]->burn_out_time);
 		i++;
 	}
 	printf("------------------------------\n");
 }
-static void print_coder(t_coder *coder, int size)
+static void	print_coder(t_coder *coder, int size)
 {
 	int i;
 	i = 0;
@@ -71,8 +71,7 @@ static void print_coder(t_coder *coder, int size)
 	while (i < size)
 	{
 		printf("coder id: %d was burnout:%ld\n", coder[i].id,
-			   coder[i].burn_out_time);
+			coder[i].burn_out_time);
 		i++;
 	}
 	printf("------------------------------\n");
-}

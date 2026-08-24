@@ -27,15 +27,21 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 		return (0);
 	return (1);
 }
+
 int	init_mutex_and_cond(t_data *data)
 {
+	if (!pthread_cond_init(&(data->usleep_cond), NULL)
+		&& !pthread_cond_init(&(data->scheduler_cond), NULL))
+		return (1);
 	if (!pthread_mutex_init(&(data->data_mutex), NULL)
-		&& !pthread_mutex_init(&(data->log_mutex), NULL)
-		&& !pthread_cond_init(&(data->usleep_cond), NULL)
-		&& !pthread_mutex_init(&(data->usleep_mutex), NULL))
+		&& !pthread_mutex_init(&(data->log_mutex), NULL))
+		return (1);
+	if ((!pthread_mutex_init(&(data->usleep_mutex), NULL))
+		&& !pthread_mutex_init(&(data->scheduler_mutex), NULL))
 		return (1);
 	return (0);
 }
+
 int	ft_atoi_safe(char *str)
 {
 	long	res;

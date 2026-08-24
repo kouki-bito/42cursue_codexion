@@ -1,8 +1,8 @@
 #include "codexion.h"
 
-long long get_time_ms(void);
-void wait_for_start(t_coder *coder);
-static void execute_coder_cycle(t_coder *coder)
+long long	get_time_ms(void);
+void		wait_for_start(t_coder *coder);
+static void	execute_coder_cycle(t_coder *coder)
 {
 	take_dongles(coder);
 	start_compile(coder);
@@ -11,9 +11,9 @@ static void execute_coder_cycle(t_coder *coder)
 	start_refactor(coder);
 }
 
-void *coder_routine(void *arg)
+void	*coder_routine(void *arg)
 {
-	t_coder *coder;
+	t_coder	*coder;
 
 	coder = (t_coder *)arg;
 	wait_for_start(coder);
@@ -23,70 +23,64 @@ void *coder_routine(void *arg)
 	}
 	return (NULL);
 }
-int check_count_compile(t_coder *coder)
+int	check_count_compile(t_coder *coder)
 {
-	int count;
+	int	count;
 
 	pthread_mutex_lock(&coder->coder_mutex);
 	count = coder->count_compile;
 	pthread_mutex_unlock(&coder->coder_mutex);
 	return (count < coder->data->number_of_compiles_required);
 }
-void wait_for_start(t_coder *coder)
+void	wait_for_start(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->data->data_mutex);
 	coder->data->start_flag = coder->data->start_flag | 1 << (coder->id - 1);
 	pthread_mutex_unlock(&coder->data->data_mutex);
 	action_usleep(0, coder);
 }
-void leave_dongle(t_coder *coder)
+void	leave_dongle(t_coder *coder)
 {
 	if (check_simulation_status(coder))
-		return;
+		return ;
 	pthread_mutex_lock(&coder->right_dongle->mutex);
 	pthread_mutex_lock(&coder->left_dongle->mutex);
 	set_dongle_use(coder->right_dongle, coder->left_dongle, 0);
 	pthread_mutex_unlock(&coder->right_dongle->mutex);
 	pthread_mutex_unlock(&coder->left_dongle->mutex);
 	set_dongle_cool_time(coder->right_dongle, coder->left_dongle,
-						 coder->data->dongle_cooldown);
+		coder->data->dongle_cooldown);
 	pthread_cond_broadcast(&coder->data->usleep_cond);
-
 }
 
-void start_compile(t_coder *coder)
+void	start_compile(t_coder *coder)
 {
-
 	if (!check_simulation_status(coder))
 	{
 		pthread_mutex_lock(&coder->coder_mutex);
-		set_burn_out(coder,coder->data->time_to_burnout);
+		set_burn_out(coder, coder->data->time_to_burnout);
 		pthread_mutex_unlock(&coder->coder_mutex);
-
-		print_log(coder->data,coder,"compile");
+		print_log(coder->data, coder, "compile");
 		action_usleep(coder->data->time_to_compile, coder);
 		pthread_mutex_lock(&coder->coder_mutex);
 		if (!check_simulation_status(coder))
 			coder->count_compile += 1;
 		pthread_mutex_unlock(&coder->coder_mutex);
-
 	}
 }
-void start_debuging(t_coder *coder)
+void	start_debuging(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{
-		print_log(coder->data,coder,"debug");
-
+		print_log(coder->data, coder, "debug");
 		action_usleep(coder->data->time_to_debug, coder);
 	}
 }
-void start_refactor(t_coder *coder)
+void	start_refactor(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{
-		print_log(coder->data,coder,"refactor");
-
+		print_log(coder->data, coder, "refactor");
 		action_usleep(coder->data->time_to_refactor, coder);
 	}
 }

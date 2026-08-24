@@ -25,23 +25,10 @@ void	destroy_coder(t_coder *coder)
 {
 	if (!coder)
 		pthread_mutex_destroy(&(coder->coder_mutex));
-	if (!coder)
-		pthread_mutex_destroy(&(coder->coder_task_mutex));
-}
-
-void	destroy_deque(deque **head)
-{
-	while (*head != NULL)
-	{
-		ft_delete_list(head);
-	}
-	return ;
 }
 
 void	destroy_dongle(t_dongle *dongle)
 {
 	pthread_cond_destroy(&(dongle->cond));
 	pthread_mutex_destroy(&(dongle->mutex));
-	if (ft_lstsize(dongle->head) > 0)
-		destroy_deque(&dongle->head);
 }

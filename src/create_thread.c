@@ -21,7 +21,8 @@ void	init_thread(t_data *data)
 }
 void	join_thread(t_data *data)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	if (pthread_join(data->monitor, NULL))
 		destroy_all(data);
