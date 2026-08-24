@@ -38,6 +38,7 @@ struct s_data {
   unsigned long request_num;
   char *scheduler;
   int is_simulation_ended;
+  int is_finished;
   long long start_time;
   int start_flag;
   pthread_mutex_t log_mutex;
@@ -86,6 +87,8 @@ struct s_coder {
   long int burn_out_time;
   int count_compile;
   pthread_mutex_t coder_mutex;
+  pthread_mutex_t action_sleep_mutex;
+  pthread_cond_t action_sleep_cond;
   t_data *data;
   t_dongle *left_dongle;
   t_dongle *right_dongle;
@@ -111,7 +114,7 @@ int is_simulation_ended(t_data *data);
 void test_heap(t_data *data);
 
 int check_simulation_status(t_coder *coder);
-void print_log(t_data *data, t_coder *coder, char *action);
+void print_log(t_data *data, t_coder *coder, char *action, long long time);
 // thread_routing.c
 void *coder_routine(void *arg);
 void leave_dongle(t_coder *coder);
@@ -154,7 +157,7 @@ long long get_time_ms(void);
 void action_usleep(long long time, t_coder *coder);
 
 // setter.c
-void set_burn_out(t_coder *coder, long long time);
+void set_burn_out(t_coder *coder, long long time, long long now);
 void set_dongle_use(t_dongle *first, t_dongle *second, int use);
 void set_dongle_cool_time(t_dongle *first, t_dongle *second,
-                          long long cool_time);
+                          long long cool_time, long long now);

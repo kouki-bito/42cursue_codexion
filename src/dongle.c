@@ -12,6 +12,7 @@ void take_dongles(t_coder *coder) {
   t_dongle *second;
   t_request request;
   long long max_cooldown;
+  long long time;
   struct timespec ts;
   pthread_mutex_lock(&(coder->data->scheduler_mutex));
   request.coder = coder;
@@ -33,6 +34,12 @@ void take_dongles(t_coder *coder) {
     if (try_take_dongle(first, second)) {
       if (take_dongle(first, second, coder)) {
         pthread_cond_broadcast(&(coder->data->scheduler_cond));
+        time = get_time_ms();
+        print_log(coder->data, coder, "take", time);
+        print_log(coder->data, coder, "take", time);
+        heap_pop(&coder->left_dongle->heap, coder);
+        heap_pop(&coder->right_dongle->heap, coder);
+        break;
       } else {
         pthread_cond_wait(&coder->data->scheduler_cond,
                           &coder->data->scheduler_mutex);
@@ -43,9 +50,6 @@ void take_dongles(t_coder *coder) {
       pthread_cond_timedwait(&(coder->data->scheduler_cond),
                              &(coder->data->scheduler_mutex), &ts);
     }
-  }
-  if (!is_simulation_ended(coder->data)) {
-    pthread_cond_broadcast(&(coder->data->scheduler_cond));
   }
   pthread_mutex_unlock(&coder->data->scheduler_mutex);
 }

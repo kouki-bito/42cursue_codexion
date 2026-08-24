@@ -1,10 +1,9 @@
 
 #include "codexion.h"
 
-void print_log(t_data *data, t_coder *coder, char *action) {
-  long long time;
+void print_log(t_data *data, t_coder *coder, char *action, long long time) {
 
-  time = get_time_ms() - data->start_time;
+  time -= data->start_time;
   pthread_mutex_lock(&data->log_mutex);
   if (strcmp(action, "take") == 0)
     printf("%lld %d has taken a dongle\n", time, coder->id);

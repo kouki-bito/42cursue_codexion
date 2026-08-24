@@ -5,24 +5,41 @@ int check_start(t_data *data);
 void wait_coders(t_data *data);
 void set_all_coder_time(t_data *data);
 int check_coder_compile_count(t_coder *coder);
+
+int check_is_finished(t_data *data);
+
+void broadcast_coders(t_coder* coders)
+{
+  int i;
+  i = 0;
+  while (i < coders[0].data->number_of_coders)
+  {
+    pthread_cond_broadcast(&coders[i].action_sleep_cond);
+    i++;
+  }
+}
+
 void *monitor(void *pointer) {
   t_coder *coders;
 
   coders = (t_coder *)pointer;
   wait_coders(coders[0].data);
   while (!is_simulation_ended(coders[0].data)) {
-    if (check_dead(coders) || check_coder_compile_count(coders)) {
+    if (check_dead(coders) || check_is_finished(coders[0].data)) {
       pthread_mutex_lock(&(coders[0].data->data_mutex));
       coders[0].data->is_simulation_ended = 1;
       pthread_mutex_unlock(&(coders[0].data->data_mutex));
-      print_log(coders[0].data, coders[0].data->burn_coder, "burn");
-      pthread_cond_broadcast(&coders[0].data->usleep_cond);
+      if (coders[0].data->burn_coder)
+        print_log(coders[0].data, coders[0].data->burn_coder, "burn",
+                  get_time_ms());
+      broadcast_coders(coders);
       pthread_cond_broadcast(&coders[0].data->scheduler_cond);
       return (void *)(1);
     }
   }
   return (void *)(1);
 }
+
 int check_coder_compile_count(t_coder *coders) {
   int i;
 
@@ -34,6 +51,7 @@ int check_coder_compile_count(t_coder *coders) {
   }
   return (1);
 }
+
 void wait_coders(t_data *data) {
   while (1) {
     if (check_start(data)) {
@@ -41,11 +59,12 @@ void wait_coders(t_data *data) {
       data->start_time = get_time_ms();
       pthread_mutex_unlock(&data->data_mutex);
       set_all_coder_time(data);
-      pthread_cond_broadcast(&data->usleep_cond);
+      pthread_cond_broadcast(&data->scheduler_cond);
       break;
     }
   }
 }
+
 void set_all_coder_time(t_data *data) {
   int i;
 
@@ -57,7 +76,9 @@ void set_all_coder_time(t_data *data) {
     i++;
   }
 }
+
 int check_start(t_data *data) {
+
   int i;
   int flag;
 
@@ -74,6 +95,26 @@ int check_start(t_data *data) {
   pthread_mutex_unlock(&data->data_mutex);
   return (1);
 }
+
+int check_is_finished(t_data *data) {
+
+  int i;
+  int flag;
+
+  i = 0;
+  pthread_mutex_lock(&data->data_mutex);
+  while (i < data->number_of_coders) {
+    flag = data->is_finished & (1 << i);
+    if (flag == 0) {
+      pthread_mutex_unlock(&data->data_mutex);
+      return (0);
+    }
+    i++;
+  }
+  pthread_mutex_unlock(&data->data_mutex);
+  return (1);
+}
+
 int check_dead(t_coder *coders) {
   int i;
   long long time;

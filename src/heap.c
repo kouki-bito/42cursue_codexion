@@ -1,4 +1,5 @@
 #include "codexion.h"
+#include <string.h>
 
 void heap_swap(t_heap *manegment, int b, int a);
 void heap_pop(t_heap *manegment, t_coder *coder);
@@ -102,8 +103,12 @@ int heap_compare(t_request *curr, t_request *request) {
 
 int heap_first(t_dongle *dongle, t_coder *coder) {
   int flag;
-
-  if (dongle->heap.size > 0)
-    flag = dongle->heap.request[0].coder == coder;
+  if (strcmp(coder->data->scheduler, "fifo") == 0) {
+    if (dongle->heap.size > 0)
+      flag = dongle->heap.request[0].coder == coder;
+  } else {
+    flag = dongle->heap.request[0].deadline ==
+           (unsigned long int)get_burn_out(coder);
+  }
   return (flag);
 }

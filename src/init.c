@@ -20,7 +20,7 @@ int	init_coder(t_data *data)
 		data->coder[i].count_compile = 0;
 		data->coder[i].right_dongle = &data->dongle[(i + 1)
 			% data->number_of_coders];
-		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL))
+		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL)||pthread_mutex_init(&(data->coder[i].action_sleep_mutex),NULL)||pthread_cond_init(&(data->coder[i].action_sleep_cond),NULL))
 		{
 			return (0);
 		}
