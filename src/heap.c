@@ -101,14 +101,15 @@ int heap_compare(t_request *curr, t_request *request) {
     return (curr->number < request->number);
 }
 
-int heap_first(t_dongle *dongle, t_coder *coder) {
+int heap_first(t_dongle *dongle, t_request *request) {
   int flag;
-  if (strcmp(coder->data->scheduler, "fifo") == 0) {
-    if (dongle->heap.size > 0)
-      flag = dongle->heap.request[0].coder == coder;
+  flag = 0;
+  if (dongle->heap.size == 0)
+    return 0;
+  if (strcmp(request->coder->data->scheduler, "fifo") == 0) {
+    flag = dongle->heap.request[0].coder == request->coder;
   } else {
-    flag = dongle->heap.request[0].deadline ==
-           (unsigned long int)get_burn_out(coder);
+    flag = dongle->heap.request[0].deadline == request->deadline;
   }
   return (flag);
 }

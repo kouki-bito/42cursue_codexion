@@ -146,7 +146,7 @@ void heap_push(t_heap *managment, t_request *request);
 void heap_init(t_heap *manegment);
 void heap_pop(t_heap *manegment, t_coder *coder);
 int heap_compare(t_request *curr, t_request *request);
-int heap_first(t_dongle *dongle, t_coder *coder);
+int heap_first(t_dongle *dongle, t_request *request);
 // chreat_thread.c
 void init_thread(t_data *data);
 void join_thread(t_data *data);

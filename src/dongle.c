@@ -5,7 +5,7 @@
 
 int try_take_dongle(t_dongle *first, t_dongle *second);
 
-int take_dongle(t_dongle *first, t_dongle *second, t_coder *coder);
+int take_dongle(t_dongle *first, t_dongle *second, t_request *request);
 
 void take_dongles(t_coder *coder) {
   t_dongle *first;
@@ -32,7 +32,7 @@ void take_dongles(t_coder *coder) {
   }
   while (!is_simulation_ended(coder->data)) {
     if (try_take_dongle(first, second)) {
-      if (take_dongle(first, second, coder)) {
+      if (take_dongle(first, second, &request)) {
         pthread_cond_broadcast(&(coder->data->scheduler_cond));
         time = get_time_ms();
         print_log(coder->data, coder, "take", time);
@@ -74,10 +74,10 @@ int try_take_dongle(t_dongle *first, t_dongle *second) {
   return (0);
 }
 
-int take_dongle(t_dongle *first, t_dongle *second, t_coder *coder) {
+int take_dongle(t_dongle *first, t_dongle *second, t_request *request) {
   pthread_mutex_lock(&first->mutex);
   pthread_mutex_lock(&second->mutex);
-  if (heap_first(first, coder) && heap_first(second, coder)) {
+  if (heap_first(first, request) && heap_first(second, request)) {
     set_dongle_use(first, second, 1);
     pthread_mutex_unlock(&first->mutex);
     pthread_mutex_unlock(&second->mutex);

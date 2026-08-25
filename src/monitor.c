@@ -32,12 +32,12 @@ void *monitor(void *pointer) {
     ts = get_interval_time(get_min_burnout(coders));
     pthread_cond_timedwait(&data->state_cond, &data->data_mutex, &ts);
   }
-  if (data->burn_coder)
-    print_log(data, data->burn_coder, "burn", get_time_ms());
   data->is_simulation_ended = 1;
   broadcast_coders(coders);
   pthread_cond_broadcast(&coders[0].data->scheduler_cond);
   pthread_mutex_unlock(&data->data_mutex);
+  if (data->burn_coder)
+    print_log(data, data->burn_coder, "burn", get_time_ms());
   return (void *)(1);
 }
 
