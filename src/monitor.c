@@ -1,6 +1,4 @@
 #include "codexion.h"
-#include <pthread.h>
-#include <time.h>
 
 int check_start(t_data *data);
 void wait_coders(t_data *data);
@@ -14,7 +12,9 @@ void broadcast_coders(t_coder *coders) {
   int i;
   i = 0;
   while (i < coders[0].data->number_of_coders) {
+    pthread_mutex_lock(&coders[i].action_sleep_mutex);
     pthread_cond_broadcast(&coders[i].action_sleep_cond);
+    pthread_mutex_unlock(&coders[i].action_sleep_mutex);
     i++;
   }
 }
@@ -33,11 +33,11 @@ void *monitor(void *pointer) {
     pthread_cond_timedwait(&data->state_cond, &data->data_mutex, &ts);
   }
   data->is_simulation_ended = 1;
-  broadcast_coders(coders);
   pthread_mutex_unlock(&data->data_mutex);
   if (data->burn_coder)
     print_log(data, data->burn_coder, "burn", get_time_ms());
   pthread_mutex_lock(&data->scheduler_mutex);
+  broadcast_coders(coders);
   pthread_cond_broadcast(&coders[0].data->scheduler_cond);
   pthread_mutex_unlock(&data->scheduler_mutex);
   return (void *)(1);
@@ -48,12 +48,13 @@ long long get_min_burnout(t_coder *coder) {
   long long min;
   int i;
   i = 0;
-  min = get_burn_out(&coder[i]);
-  i++;
+  min = LLONG_MAX;
   while (i < coder[0].data->number_of_coders) {
-    temp = get_burn_out(&coder[i]);
-    if (temp < min)
-      min = temp;
+    if (check_count_compile(&coder[i])) {
+      temp = get_burn_out(&coder[i]);
+      if (temp < min)
+        min = temp;
+    }
     i++;
   }
   return min;

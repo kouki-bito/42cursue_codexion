@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <limits.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +18,6 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-
 typedef struct s_data t_data;
 typedef struct s_dongle t_dongle;
 typedef struct s_coder t_coder;
