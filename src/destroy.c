@@ -36,4 +36,6 @@ void destroy_dongle(t_dongle *dongle) {
   pthread_mutex_destroy(&(dongle->mutex));
   pthread_cond_destroy(&(dongle->heap.cond));
   pthread_mutex_destroy(&(dongle->heap.lock));
+  pthread_mutex_destroy(&dongle->scheduler_mutex);
+  pthread_mutex_destroy(&dongle->cool_down_mutex);
 }

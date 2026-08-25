@@ -34,13 +34,11 @@ int ft_parse(int argc, char *argv[], t_data *data) {
 }
 
 int init_mutex_and_cond(t_data *data) {
-  if (pthread_cond_init(&(data->scheduler_cond), NULL) &&
-      pthread_cond_init(&(data->state_cond), NULL))
-    return (1);
-  if (pthread_mutex_init(&(data->data_mutex), NULL) &&
-      pthread_mutex_init(&(data->log_mutex), NULL))
-    return (1);
-  if (pthread_mutex_init(&(data->scheduler_mutex), NULL))
+  if (!pthread_cond_init(&(data->scheduler_cond), NULL) &&
+      !pthread_cond_init(&(data->state_cond), NULL) &&
+      !pthread_mutex_init(&(data->data_mutex), NULL) &&
+      !pthread_mutex_init(&(data->log_mutex), NULL) &&
+      !pthread_mutex_init(&(data->scheduler_mutex), NULL))
     return (1);
   return (0);
 }

@@ -26,9 +26,9 @@ void *monitor(void *pointer) {
   coders = (t_coder *)pointer;
   data = coders[0].data;
   wait_coders(coders[0].data);
-  pthread_mutex_lock(&coders[0].data->data_mutex);
+  pthread_mutex_lock(&data->data_mutex);
   while (!data->is_simulation_ended &&
-         data->is_finished != data->number_of_coders && check_dead(coders)) {
+         data->is_finished != data->number_of_coders && !check_dead(coders)) {
     ts = get_interval_time(get_min_burnout(coders));
     pthread_cond_timedwait(&data->state_cond, &data->data_mutex, &ts);
   }
@@ -37,7 +37,7 @@ void *monitor(void *pointer) {
   data->is_simulation_ended = 1;
   broadcast_coders(coders);
   pthread_cond_broadcast(&coders[0].data->scheduler_cond);
-
+  pthread_mutex_unlock(&data->data_mutex);
   return (void *)(1);
 }
 
@@ -126,9 +126,7 @@ int check_dead(t_coder *coders) {
       time = coders[i].burn_out_time - coders[0].data->start_time;
       now = get_time_ms() - coders[0].data->start_time;
       if ((time <= now)) {
-        pthread_mutex_lock(&(coders[0].data->data_mutex));
         coders[0].data->burn_coder = &coders[i];
-        pthread_mutex_unlock(&(coders[0].data->data_mutex));
         pthread_mutex_unlock(&(coders[i].coder_mutex));
         return (1);
       }

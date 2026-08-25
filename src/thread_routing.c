@@ -29,11 +29,10 @@ void *coder_routine(void *arg) {
 }
 
 void has_finished(t_coder *coder) {
-  pthread_mutex_lock(&coder->data->scheduler_mutex);
-
+  pthread_mutex_lock(&coder->data->data_mutex);
   coder->data->is_finished++;
   pthread_cond_signal(&coder->data->state_cond);
-  pthread_mutex_unlock(&coder->data->scheduler_mutex);
+  pthread_mutex_unlock(&coder->data->data_mutex);
   return;
 }
 
@@ -60,6 +59,7 @@ void leave_dongle(t_coder *coder) {
   long long time;
   if (check_simulation_status(coder))
     return;
+  pthread_mutex_lock(&coder->data->scheduler_mutex);
   time = get_time_ms();
   pthread_mutex_lock(&coder->right_dongle->mutex);
   pthread_mutex_lock(&coder->left_dongle->mutex);
@@ -69,6 +69,7 @@ void leave_dongle(t_coder *coder) {
   pthread_mutex_unlock(&coder->right_dongle->mutex);
   pthread_mutex_unlock(&coder->left_dongle->mutex);
   pthread_cond_broadcast(&coder->data->scheduler_cond);
+  pthread_mutex_unlock(&coder->data->scheduler_mutex);
 }
 
 void start_compile(t_coder *coder) {
@@ -78,10 +79,11 @@ void start_compile(t_coder *coder) {
     set_burn_out(coder, coder->data->time_to_burnout, time);
     print_log(coder->data, coder, "compile", time);
     action_usleep(coder->data->time_to_compile, coder);
-    pthread_mutex_lock(&coder->coder_mutex);
-    if (!check_simulation_status(coder))
+    if (!check_simulation_status(coder)) {
+      pthread_mutex_lock(&coder->coder_mutex);
       coder->count_compile += 1;
-    pthread_mutex_unlock(&coder->coder_mutex);
+      pthread_mutex_unlock(&coder->coder_mutex);
+    }
   }
 }
 

@@ -48,20 +48,5 @@ void action_usleep(long long time, t_coder *coder) {
                              &coder->action_sleep_mutex, &ts);
       pthread_mutex_unlock(&coder->action_sleep_mutex);
     }
-  } else {
-    if (!check_simulation_status(coder)) {
-      pthread_mutex_lock(&coder->action_sleep_mutex);
-      pthread_cond_wait(&(coder->action_sleep_cond),
-                        &coder->action_sleep_mutex);
-      pthread_mutex_unlock(&coder->action_sleep_mutex);
-    }
   }
 }
-
-
-  
-      
-
-    
-
-  
