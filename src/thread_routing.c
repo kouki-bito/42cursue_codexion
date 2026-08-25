@@ -31,7 +31,7 @@ void *coder_routine(void *arg) {
 void has_finished(t_coder *coder) {
   pthread_mutex_lock(&coder->data->data_mutex);
   coder->data->is_finished++;
-  pthread_cond_signal(&coder->data->state_cond);
+  pthread_cond_broadcast(&coder->data->state_cond);
   pthread_mutex_unlock(&coder->data->data_mutex);
   return;
 }
@@ -48,7 +48,7 @@ int check_count_compile(t_coder *coder) {
 void wait_for_start(t_coder *coder) {
   pthread_mutex_lock(&coder->data->data_mutex);
   coder->data->read_count++;
-  pthread_cond_signal(&coder->data->state_cond);
+  pthread_cond_broadcast(&coder->data->state_cond);
   while (!coder->data->start_flag && !coder->data->is_simulation_ended) {
     pthread_cond_wait(&coder->data->state_cond, &coder->data->data_mutex);
   }
