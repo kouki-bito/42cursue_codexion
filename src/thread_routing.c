@@ -27,13 +27,16 @@ void *coder_routine(void *arg) {
   }
   return (NULL);
 }
+
 void has_finished(t_coder *coder) {
   pthread_mutex_lock(&coder->data->scheduler_mutex);
 
-  coder->data->is_finished = coder->data->is_finished | 1 << (coder->id - 1);
+  coder->data->is_finished++;
+  pthread_cond_signal(&coder->data->state_cond);
   pthread_mutex_unlock(&coder->data->scheduler_mutex);
   return;
 }
+
 int check_count_compile(t_coder *coder) {
   int count;
 
@@ -44,11 +47,13 @@ int check_count_compile(t_coder *coder) {
 }
 
 void wait_for_start(t_coder *coder) {
-  pthread_mutex_lock(&coder->data->scheduler_mutex);
-  coder->data->start_flag = coder->data->start_flag | 1 << (coder->id - 1);
-  pthread_cond_wait(&coder->data->scheduler_cond,
-                    &coder->data->scheduler_mutex);
-  pthread_mutex_unlock(&coder->data->scheduler_mutex);
+  pthread_mutex_lock(&coder->data->data_mutex);
+  coder->data->read_count++;
+  pthread_cond_signal(&coder->data->state_cond);
+  while (!coder->data->start_flag && !coder->data->is_simulation_ended) {
+    pthread_cond_wait(&coder->data->state_cond, &coder->data->data_mutex);
+  }
+  pthread_mutex_unlock(&coder->data->data_mutex);
 }
 
 void leave_dongle(t_coder *coder) {

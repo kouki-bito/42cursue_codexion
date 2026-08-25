@@ -41,12 +41,12 @@ struct s_data {
   int is_finished;
   long long start_time;
   int start_flag;
+  int read_count;
   pthread_mutex_t log_mutex;
   pthread_mutex_t data_mutex;
   pthread_mutex_t scheduler_mutex;
   pthread_cond_t scheduler_cond;
-  pthread_mutex_t usleep_mutex;
-  pthread_cond_t usleep_cond;
+  pthread_cond_t state_cond;
   pthread_t monitor;
   t_coder *coder;
   t_coder *burn_coder;

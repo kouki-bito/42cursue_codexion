@@ -1,6 +1,7 @@
 
 
 #include "codexion.h"
+#include <pthread.h>
 
 struct timespec get_time(void) {
   struct timespec ts;
@@ -22,6 +23,7 @@ long long get_time_ms(void) {
 }
 struct timespec get_interval_time(long int time) {
   struct timespec ts;
+
   ts.tv_nsec = 0;
   ts.tv_sec = 0;
   ts.tv_sec += time / 1000;
@@ -32,13 +34,14 @@ struct timespec get_interval_time(long int time) {
   }
   return (ts);
 }
+
 void action_usleep(long long time, t_coder *coder) {
   struct timespec ts;
   long long stime;
 
   if (time != 0) {
-    ts = get_interval_time(time + get_time_ms());
     stime = get_time_ms() + time;
+    ts = get_interval_time(stime);
     while (!check_simulation_status(coder) && get_time_ms() < stime) {
       pthread_mutex_lock(&coder->action_sleep_mutex);
       pthread_cond_timedwait(&(coder->action_sleep_cond),
@@ -48,9 +51,17 @@ void action_usleep(long long time, t_coder *coder) {
   } else {
     if (!check_simulation_status(coder)) {
       pthread_mutex_lock(&coder->action_sleep_mutex);
-      pthread_cond_timedwait(&(coder->action_sleep_cond),
-                             &coder->action_sleep_mutex, &ts);
+      pthread_cond_wait(&(coder->action_sleep_cond),
+                        &coder->action_sleep_mutex);
       pthread_mutex_unlock(&coder->action_sleep_mutex);
     }
   }
 }
+
+
+  
+      
+
+    
+
+  
