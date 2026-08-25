@@ -42,8 +42,9 @@ void action_usleep(long long time, t_coder *coder) {
   if (time != 0) {
     stime = get_time_ms() + time;
     ts = get_interval_time(stime);
-    while (!check_simulation_status(coder) && get_time_ms() < stime) {
-      pthread_mutex_lock(&coder->action_sleep_mutex);
+    pthread_mutex_lock(&coder->action_sleep_mutex);
+    while (!check_simulation_status(coder) && get_time_ms() < stime &&
+           get_time_ms() < get_burn_out(coder)) {
       pthread_cond_timedwait(&(coder->action_sleep_cond),
                              &coder->action_sleep_mutex, &ts);
       pthread_mutex_unlock(&coder->action_sleep_mutex);

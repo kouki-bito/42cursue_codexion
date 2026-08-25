@@ -34,10 +34,12 @@ void *monitor(void *pointer) {
   }
   data->is_simulation_ended = 1;
   broadcast_coders(coders);
-  pthread_cond_broadcast(&coders[0].data->scheduler_cond);
   pthread_mutex_unlock(&data->data_mutex);
   if (data->burn_coder)
     print_log(data, data->burn_coder, "burn", get_time_ms());
+  pthread_mutex_lock(&data->scheduler_mutex);
+  pthread_cond_broadcast(&coders[0].data->scheduler_cond);
+  pthread_mutex_unlock(&data->scheduler_mutex);
   return (void *)(1);
 }
 
