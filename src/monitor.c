@@ -10,6 +10,7 @@ int check_is_finished(t_data *data);
 
 void broadcast_coders(t_coder *coders) {
   int i;
+
   i = 0;
   while (i < coders[0].data->number_of_coders) {
     pthread_mutex_lock(&coders[i].action_sleep_mutex);
@@ -23,13 +24,14 @@ void *monitor(void *pointer) {
   t_coder *coders;
   t_data *data;
   struct timespec ts;
+
   coders = (t_coder *)pointer;
   data = coders[0].data;
   wait_coders(coders[0].data);
   pthread_mutex_lock(&data->data_mutex);
   while (!data->is_simulation_ended &&
          data->is_finished != data->number_of_coders && !check_dead(coders)) {
-    ts = get_interval_time(get_min_burnout(coders));
+    ts = mono_deadline_to_realtime_ts(get_min_burnout(coders));
     pthread_cond_timedwait(&data->state_cond, &data->data_mutex, &ts);
   }
   data->is_simulation_ended = 1;
@@ -47,6 +49,7 @@ long long get_min_burnout(t_coder *coder) {
   long long temp;
   long long min;
   int i;
+
   i = 0;
   min = LLONG_MAX;
   while (i < coder[0].data->number_of_coders) {
@@ -57,7 +60,7 @@ long long get_min_burnout(t_coder *coder) {
     }
     i++;
   }
-  return min;
+  return (min);
 }
 
 int check_coder_compile_count(t_coder *coders) {
@@ -97,7 +100,6 @@ void set_all_coder_time(t_data *data) {
 }
 
 int check_start(t_data *data) {
-
   int i;
   int flag;
 
@@ -115,7 +117,7 @@ int check_start(t_data *data) {
   return (1);
 }
 
-// int check_is_finished(t_data *data) { return 1; }
+// int check_is_finished(t_data *data) { return (1); }
 
 int check_dead(t_coder *coders) {
   int i;

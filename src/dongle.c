@@ -14,6 +14,7 @@ void take_dongles(t_coder *coder) {
   long long max_cooldown;
   long long time;
   struct timespec ts;
+
   pthread_mutex_lock(&(coder->data->scheduler_mutex));
   request.coder = coder;
   request.deadline = get_burn_out(coder);
@@ -46,9 +47,14 @@ void take_dongles(t_coder *coder) {
       }
     } else {
       max_cooldown = max_cool_time(first, second);
-      ts = get_interval_time(max_cooldown);
-      pthread_cond_timedwait(&(coder->data->scheduler_cond),
-                             &(coder->data->scheduler_mutex), &ts);
+      if (max_cooldown > get_time_ms()) {
+        ts = mono_deadline_to_realtime_ts(max_cooldown);
+        pthread_cond_timedwait(&(coder->data->scheduler_cond),
+                               &(coder->data->scheduler_mutex), &ts);
+      } else {
+        pthread_cond_wait(&(coder->data->scheduler_cond),
+                          &(coder->data->scheduler_mutex));
+      }
     }
   }
   pthread_mutex_unlock(&coder->data->scheduler_mutex);
@@ -81,11 +87,11 @@ int take_dongle(t_dongle *first, t_dongle *second, t_request *request) {
     set_dongle_use(first, second, 1);
     pthread_mutex_unlock(&first->mutex);
     pthread_mutex_unlock(&second->mutex);
-    return 1;
+    return (1);
   }
   pthread_mutex_unlock(&first->mutex);
   pthread_mutex_unlock(&second->mutex);
-  return 0;
+  return (0);
 }
 
 void cool_time_sleep(t_dongle *first, t_dongle *second, t_coder *coder) {

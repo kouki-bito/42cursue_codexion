@@ -18,6 +18,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+
 typedef struct s_data t_data;
 typedef struct s_dongle t_dongle;
 typedef struct s_coder t_coder;
@@ -60,7 +61,7 @@ struct s_condtion {
   int recatoring;
 };
 struct s_request {
-  unsigned long deadline;
+  long long deadline;
   t_coder *coder;
   unsigned long number;
 };
@@ -84,7 +85,7 @@ struct s_dongle {
 struct s_coder {
   pthread_t thread;
   int id;
-  long int burn_out_time;
+  long long burn_out_time;
   int count_compile;
   pthread_mutex_t coder_mutex;
   pthread_mutex_t action_sleep_mutex;
@@ -99,6 +100,7 @@ struct s_deque {
   struct s_deque *next;
 };
 
+int try_take_dongle(t_dongle *first, t_dongle *second);
 void take_dongles(t_coder *coder);
 int ft_parse(int, char *[], t_data *);
 int ft_is_num(char[]);
@@ -152,8 +154,9 @@ void init_thread(t_data *data);
 void join_thread(t_data *data);
 // check_time.c
 struct timespec get_time(void);
-struct timespec get_interval_time(long int time);
+struct timespec get_interval_time(long long time);
 long long get_time_ms(void);
+struct timespec mono_deadline_to_realtime_ts(long long mono_deadline);
 void action_usleep(long long time, t_coder *coder);
 
 // setter.c

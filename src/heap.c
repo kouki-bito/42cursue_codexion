@@ -100,7 +100,33 @@ int heap_compare(t_request *curr, t_request *request) {
   } else
     return (curr->number < request->number);
 }
-
+int has_ready_higher_priority_request(t_dongle *dongle, t_request *request) {
+  int i;
+  i = 0;
+  long long now;
+  t_request *candinate;
+  now = get_time_ms();
+  while (i < dongle->heap.size) {
+    candinate = &dongle->heap.request[i];
+    if (candinate->coder != request->coder &&
+        heap_compare(candinate, request)) {
+      printf("req = %d candidate = %d now = %lld req_deadline=%lu candidate_deadline=%lu Luse = %d Ruse = %d Lcool = %lld Rcool =%lld\n ",
+                                                          request->coder->id,
+             candinate->coder->id, now, request->deadline, candinate->deadline,
+             candinate->coder->left_dongle->take_in_use,
+             candinate->coder->right_dongle->take_in_use,
+             get_dongle_cool_time(candinate->coder->left_dongle),
+             get_dongle_cool_time(candinate->coder->right_dongle));
+      if (candinate->coder->right_dongle->take_in_use == 0 &&
+          candinate->coder->left_dongle->take_in_use == 0 &&
+          get_dongle_cool_time(candinate->coder->right_dongle) <= now &&
+          get_dongle_cool_time(candinate->coder->left_dongle) <= now)
+        return 0;
+    }
+    i++;
+  }
+  return 1;
+}
 int heap_first(t_dongle *dongle, t_request *request) {
   int flag;
   flag = 0;
@@ -113,3 +139,19 @@ int heap_first(t_dongle *dongle, t_request *request) {
   }
   return (flag);
 }
+
+// int heap_first(t_dongle *dongle, t_request *request) {
+//   int flag;
+//   flag = 0;
+//   if (dongle->heap.size == 0)
+//     return (0);
+//   if (strcmp(request->coder->data->scheduler, "fifo") == 0) {
+//     flag = dongle->heap.request[0].coder == request->coder;
+//   } else {
+//     if (dongle->heap.request[0].coder == request->coder)
+//       flag = 1;
+//     else
+//       flag = has_ready_higher_priority_request(dongle, request);
+//   }
+//   return (flag);
+// }
