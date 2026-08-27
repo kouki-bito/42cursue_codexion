@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/27 20:02:21 by kbito             #+#    #+#             */
+/*   Updated: 2026/08/27 20:05:30 by kbito            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 #include <pthread.h>
 
-// int		clean_dongle(t_data *data);
-// void	free_que(deque **head);
 int	init_coder(t_data *data)
 {
 	int	i;
@@ -24,9 +34,7 @@ int	init_coder(t_data *data)
 		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL)
 			|| pthread_mutex_init(&(data->coder[i].action_sleep_mutex), NULL)
 			|| pthread_cond_init(&(data->coder[i].action_sleep_cond), NULL))
-		{
 			return (0);
-		}
 		data->coder[i].data = data;
 		i++;
 	}
@@ -59,4 +67,22 @@ int	init_dongle(t_data *data)
 		i++;
 	}
 	return (1);
+}
+
+int	init_mutex_and_cond(t_data *data)
+{
+	if (!pthread_cond_init(&(data->scheduler_cond), NULL)
+		&& !pthread_cond_init(&(data->state_cond), NULL)
+		&& !pthread_mutex_init(&(data->data_mutex), NULL)
+		&& !pthread_mutex_init(&(data->log_mutex), NULL)
+		&& !pthread_mutex_init(&(data->scheduler_mutex), NULL))
+		return (1);
+	return (0);
+}
+
+void	heap_init(t_heap *manegment)
+{
+	manegment->size = 0;
+	pthread_mutex_init(&manegment->lock, NULL);
+	pthread_cond_init(&manegment->cond, NULL);
 }

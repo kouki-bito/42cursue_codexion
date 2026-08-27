@@ -10,9 +10,7 @@ SRCS        = main.c \
               src/parse.c \
 			  src/init.c \
 			  src/dongle.c\
-			  src/list.c\
 			  src/monitor.c\
-			  src/sort.c\
 			  src/thread_routing.c\
 			  src/time_utilis.c \
 			  src/destroy.c \
@@ -22,7 +20,10 @@ SRCS        = main.c \
 			  src/log.c\
 			  src/check_time.c\
 			  src/check_simulation.c\
-			  src/create_thread.c
+			  src/create_thread.c\
+			  src/sleep.c\
+			  src/check_heap.c\
+			  src/coder_action.c
 
 			 
 

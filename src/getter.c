@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   getter.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/27 19:31:12 by kbito             #+#    #+#             */
+/*   Updated: 2026/08/27 20:20:57 by kbito            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "codexion.h"
 
@@ -11,15 +22,27 @@ long long	get_burn_out(t_coder *coder)
 	return (bourn_out);
 }
 
-t_coder	*get_heap_first(t_heap *heap)
+long long	get_min_burnout(t_coder *coder)
 {
-	t_coder	*coder;
+	long long	temp;
+	long long	min;
+	int			i;
 
-	pthread_mutex_lock(&heap->lock);
-	coder = heap->request[0].coder;
-	pthread_mutex_unlock(&heap->lock);
-	return (coder);
+	i = 0;
+	min = LLONG_MAX;
+	while (i < coder[0].data->number_of_coders)
+	{
+		if (check_count_compile(&coder[i]))
+		{
+			temp = get_burn_out(&coder[i]);
+			if (temp < min)
+				min = temp;
+		}
+		i++;
+	}
+	return (min);
 }
+
 long long	get_dongle_cool_time(t_dongle *dongle)
 {
 	long long	time;
@@ -29,6 +52,7 @@ long long	get_dongle_cool_time(t_dongle *dongle)
 	pthread_mutex_unlock(&dongle->cool_down_mutex);
 	return (time);
 }
+
 long long	max_cool_time(t_dongle *first, t_dongle *second)
 {
 	long long	first_cooldown;
@@ -41,6 +65,7 @@ long long	max_cool_time(t_dongle *first, t_dongle *second)
 	else
 		return (second_cooldown);
 }
+
 int	is_simulation_ended(t_data *data)
 {
 	int	end;

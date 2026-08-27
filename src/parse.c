@@ -1,5 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/27 19:31:28 by kbito             #+#    #+#             */
+/*   Updated: 2026/08/27 19:32:24 by kbito            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 #include <unistd.h>
+
+int	ft_check_zero(t_data *data);
 
 int	ft_parse(int argc, char *argv[], t_data *data)
 {
@@ -22,26 +36,36 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 	(*data).read_count = 0;
 	(*data).is_simulation_ended = 0;
 	(*data).burn_coder = NULL;
-	if ((*data).number_of_coders == -1 || (*data).time_to_burnout == -1
-		|| (*data).time_to_compile == -1 || (*data).time_to_debug == -1
-		|| (*data).time_to_refactor == -1
-		|| (*data).number_of_compiles_required == -1
-		|| (*data).dongle_cooldown == -1)
+	if (!ft_check_zero(data))
 		return (0);
 	if (!init_mutex_and_cond(data))
 		return (0);
 	return (1);
 }
 
-int	init_mutex_and_cond(t_data *data)
+int	ft_check_zero(t_data *data)
 {
-	if (!pthread_cond_init(&(data->scheduler_cond), NULL)
-		&& !pthread_cond_init(&(data->state_cond), NULL)
-		&& !pthread_mutex_init(&(data->data_mutex), NULL)
-		&& !pthread_mutex_init(&(data->log_mutex), NULL)
-		&& !pthread_mutex_init(&(data->scheduler_mutex), NULL))
-		return (1);
-	return (0);
+	if ((*data).number_of_coders == 0)
+		return (0);
+	if ((*data).time_to_burnout == 0)
+		return (0);
+	if ((*data).time_to_compile == 0)
+		return (0);
+	if ((*data).time_to_debug == 0)
+		return (0);
+	if ((*data).time_to_refactor == 0)
+		return (0);
+	if ((*data).number_of_compiles_required == 0)
+		return (0);
+	if ((*data).dongle_cooldown == 0)
+		return (0);
+	if ((*data).number_of_coders == -1 || (*data).time_to_burnout == -1
+		|| (*data).time_to_compile == -1 || (*data).time_to_debug == -1
+		|| (*data).time_to_refactor == -1
+		|| (*data).number_of_compiles_required == -1
+		|| (*data).dongle_cooldown == -1)
+		return (0);
+	return (1);
 }
 
 int	ft_atoi_safe(char *str)

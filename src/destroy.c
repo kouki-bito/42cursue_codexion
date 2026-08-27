@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   destroy.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/27 19:29:36 by kbito             #+#    #+#             */
+/*   Updated: 2026/08/27 19:29:37 by kbito            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 #include <pthread.h>
 
@@ -21,7 +33,6 @@ void	destroy_all(t_data *data)
 	}
 	free(data->dongle);
 	free(data->coder);
-	// free(data);
 }
 
 void	destroy_coder(t_coder *coder)
