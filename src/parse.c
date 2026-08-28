@@ -47,17 +47,7 @@ int	ft_check_zero(t_data *data)
 {
 	if ((*data).number_of_coders == 0)
 		return (0);
-	if ((*data).time_to_burnout == 0)
-		return (0);
-	if ((*data).time_to_compile == 0)
-		return (0);
-	if ((*data).time_to_debug == 0)
-		return (0);
-	if ((*data).time_to_refactor == 0)
-		return (0);
 	if ((*data).number_of_compiles_required == 0)
-		return (0);
-	if ((*data).dongle_cooldown == 0)
 		return (0);
 	if ((*data).number_of_coders == -1 || (*data).time_to_burnout == -1
 		|| (*data).time_to_compile == -1 || (*data).time_to_debug == -1

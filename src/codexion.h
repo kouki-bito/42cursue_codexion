@@ -106,6 +106,7 @@ struct							s_deque
 	struct s_deque				*next;
 };
 
+t_request						make_request(t_coder *coder);
 void							wait_for_start(t_coder *coder);
 void							has_finished(t_coder *coder);
 

@@ -37,9 +37,8 @@ void	broadcast_coders(t_coder *coders)
 
 void	*monitor(void *pointer)
 {
-	t_coder			*coders;
-	t_data			*data;
-
+	t_coder	*coders;
+	t_data	*data;
 
 	coders = (t_coder *)pointer;
 	data = coders[0].data;
@@ -48,7 +47,7 @@ void	*monitor(void *pointer)
 	while (!data->is_simulation_ended
 		&& data->is_finished != data->number_of_coders && !check_dead(coders))
 	{
-		wait_monitor_event(data,coders);
+		wait_monitor_event(data, coders);
 	}
 	data->is_simulation_ended = 1;
 	pthread_mutex_unlock(&data->data_mutex);
@@ -74,6 +73,7 @@ void	wait_coders(t_data *data)
 	pthread_cond_broadcast(&data->state_cond);
 	pthread_mutex_unlock(&data->data_mutex);
 }
+
 static void	wait_monitor_event(t_data *data, t_coder *coders)
 {
 	long long		min_burnout;

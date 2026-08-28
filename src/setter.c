@@ -50,3 +50,16 @@ void	set_all_coder_time(t_data *data)
 		i++;
 	}
 }
+
+t_request	make_request(t_coder *coder)
+{
+	t_request	request;
+
+	request.coder = coder;
+	request.deadline = get_burn_out(coder);
+	pthread_mutex_lock(&coder->data->data_mutex);
+	request.number = coder->data->request_num;
+	coder->data->request_num++;
+	pthread_mutex_unlock(&coder->data->data_mutex);
+	return (request);
+}

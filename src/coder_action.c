@@ -6,7 +6,7 @@
 /*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 19:48:02 by kbito             #+#    #+#             */
-/*   Updated: 2026/08/27 19:48:07 by kbito            ###   ########.fr       */
+/*   Updated: 2026/08/28 00:41:27 by kbito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ void	start_compile(t_coder *coder)
 {
 	long long	time;
 
+	if (coder->data->number_of_coders == 1)
+	{
+		pthread_mutex_lock(&coder->data->scheduler_mutex);
+		pthread_cond_wait(&coder->data->scheduler_cond,
+			&coder->data->scheduler_mutex);
+		pthread_mutex_unlock(&coder->data->scheduler_mutex);
+	}
 	if (!check_simulation_status(coder))
 	{
 		time = get_time_ms();
