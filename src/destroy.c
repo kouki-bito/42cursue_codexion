@@ -15,9 +15,6 @@
 
 void	destroy_all(t_data *data)
 {
-	int	i;
-
-	i = 0;
 	if (!data)
 		return ;
 	pthread_mutex_destroy(&(data->log_mutex));
@@ -25,31 +22,41 @@ void	destroy_all(t_data *data)
 	pthread_mutex_destroy(&(data->scheduler_mutex));
 	pthread_cond_destroy(&(data->scheduler_cond));
 	pthread_cond_destroy(&(data->state_cond));
-	while (data->number_of_coders > i)
-	{
-		destroy_coder(&(data->coder[i]));
-		destroy_dongle(&(data->dongle[i]));
-		i++;
-	}
+	destroy_coder((data->coder), data->number_of_coders);
+	destroy_dongle(data->dongle, data->number_of_coders);
 	free(data->dongle);
 	free(data->coder);
 }
 
-void	destroy_coder(t_coder *coder)
+void	destroy_coder(t_coder *coder, int num)
 {
+	int	i;
+
 	if (!coder)
 		return ;
-	pthread_mutex_destroy(&(coder->coder_mutex));
-	pthread_mutex_destroy(&(coder->action_sleep_mutex));
-	pthread_cond_destroy(&(coder->action_sleep_cond));
+	i = 0;
+	while (i < num)
+	{
+		if (!&coder[i])
+			return ;
+		pthread_mutex_destroy(&(coder[i].coder_mutex));
+		pthread_mutex_destroy(&(coder[i].action_sleep_mutex));
+		pthread_cond_destroy(&(coder[i].action_sleep_cond));
+		i++;
+	}
 }
 
-void	destroy_dongle(t_dongle *dongle)
+void	destroy_dongle(t_dongle *dongle, int num)
 {
-	pthread_cond_destroy(&(dongle->cond));
-	pthread_mutex_destroy(&(dongle->mutex));
-	pthread_cond_destroy(&(dongle->heap.cond));
-	pthread_mutex_destroy(&(dongle->heap.lock));
-	pthread_mutex_destroy(&dongle->scheduler_mutex);
-	pthread_mutex_destroy(&dongle->cool_down_mutex);
+	int	i;
+
+	i = 0;
+	if (!dongle)
+		return ;
+	while (i < num)
+	{
+		pthread_mutex_destroy(&(dongle[i].mutex));
+		pthread_mutex_destroy(&dongle[i].cool_down_mutex);
+		i++;
+	}
 }

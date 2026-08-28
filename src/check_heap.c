@@ -43,11 +43,11 @@ int	has_ready_higher_priority_request(t_dongle *dongle, t_request *request)
 				&& candinate->coder->left_dongle->take_in_use == 0
 				&& get_dongle_cool_time(candinate->coder->right_dongle) <= now
 				&& get_dongle_cool_time(candinate->coder->left_dongle) <= now)
-				return (0);
+				return (1);
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int	heap_first(t_dongle *dongle, t_request *request)
@@ -63,7 +63,11 @@ int	heap_first(t_dongle *dongle, t_request *request)
 	}
 	else
 	{
-		flag = dongle->heap.request[0].deadline == request->deadline;
+		if (dongle->heap.request[0].coder == request->coder)
+			return (1);
+		if (has_ready_higher_priority_request(dongle, request))
+			return (0);
+		return (1);
 	}
 	return (flag);
 }

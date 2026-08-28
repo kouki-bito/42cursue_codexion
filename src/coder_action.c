@@ -47,8 +47,11 @@ void	start_compile(t_coder *coder)
 	if (coder->data->number_of_coders == 1)
 	{
 		pthread_mutex_lock(&coder->data->scheduler_mutex);
-		pthread_cond_wait(&coder->data->scheduler_cond,
-			&coder->data->scheduler_mutex);
+		while (!check_simulation_status(coder))
+		{
+			pthread_cond_wait(&coder->data->scheduler_cond,
+				&coder->data->scheduler_mutex);
+		}
 		pthread_mutex_unlock(&coder->data->scheduler_mutex);
 	}
 	if (!check_simulation_status(coder))

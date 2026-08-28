@@ -71,15 +71,11 @@ struct							s_heap
 {
 	t_request					request[300];
 	int							size;
-	pthread_mutex_t				lock;
-	pthread_cond_t				cond;
 };
 struct							s_dongle
 {
 	pthread_mutex_t				mutex;
-	pthread_mutex_t				scheduler_mutex;
 	pthread_mutex_t				cool_down_mutex;
-	pthread_cond_t				cond;
 	long long					cool_time;
 	int							take_in_use;
 	int							id;
@@ -158,8 +154,8 @@ long long						max_cool_time(t_dongle *first,
 // destroy.c
 void							destroy_all(t_data *data);
 void							destroy_all(t_data *data);
-void							destroy_coder(t_coder *coder);
-void							destroy_dongle(t_dongle *dongle);
+void							destroy_dongle(t_dongle *dongle, int num);
+void							destroy_coder(t_coder *coder, int num);
 // heap.c
 void							heap_push(t_heap *managment,
 									t_request *request);
@@ -170,8 +166,8 @@ int								heap_compare(t_request *curr,
 int								heap_first(t_dongle *dongle,
 									t_request *request);
 // chreat_thread.c
-void							init_thread(t_data *data);
-void							join_thread(t_data *data);
+int								init_thread(t_data *data);
+int								join_thread(t_data *data);
 // check_time.c
 struct timespec					get_time(void);
 struct timespec					get_interval_time(long long time);

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "codexion.h"
-#include <string.h>
 
 void		heap_swap(t_heap *manegment, int b, int a);
 void		heap_pop(t_heap *manegment, t_coder *coder);
