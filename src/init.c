@@ -13,8 +13,8 @@
 #include "codexion.h"
 #include <pthread.h>
 
-int	init_dongle_mutex_and_cond(t_data *data);
-int	init_coder_mutex_and_cond(t_data *data);
+static int	init_dongle_mutex_and_cond(t_data *data);
+static int	init_coder_mutex_and_cond(t_data *data);
 
 int	init_coder(t_data *data)
 {
@@ -42,7 +42,7 @@ int	init_coder(t_data *data)
 	return (1);
 }
 
-int	init_coder_mutex_and_cond(t_data *data)
+static int	init_coder_mutex_and_cond(t_data *data)
 {
 	int	i;
 
@@ -91,7 +91,7 @@ int	init_dongle(t_data *data)
 	return (1);
 }
 
-int	init_dongle_mutex_and_cond(t_data *data)
+static int	init_dongle_mutex_and_cond(t_data *data)
 {
 	int	i;
 

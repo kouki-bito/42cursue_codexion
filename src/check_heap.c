@@ -12,6 +12,9 @@
 
 #include "codexion.h"
 
+static int	has_ready_higher_priority_request(t_dongle *dongle,
+				t_request *request);
+
 int	heap_compare(t_request *curr, t_request *request)
 {
 	if (strcmp(curr->coder->data->scheduler, "edf") == 0)
@@ -25,7 +28,8 @@ int	heap_compare(t_request *curr, t_request *request)
 		return (curr->number < request->number);
 }
 
-int	has_ready_higher_priority_request(t_dongle *dongle, t_request *request)
+static int	has_ready_higher_priority_request(t_dongle *dongle,
+		t_request *request)
 {
 	int			i;
 	long long	now;

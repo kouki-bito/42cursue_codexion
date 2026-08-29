@@ -14,8 +14,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
-void	finish_threads(t_data *data);
-void	join_created_threads(t_data *data, int num);
+static void	finish_threads(t_data *data);
+static void	join_created_threads(t_data *data, int num);
 
 int	init_thread(t_data *data)
 {
@@ -40,7 +40,7 @@ int	init_thread(t_data *data)
 	return (1);
 }
 
-void	finish_threads(t_data *data)
+static void	finish_threads(t_data *data)
 {
 	pthread_mutex_lock(&data->data_mutex);
 	data->is_simulation_ended = 1;
@@ -52,7 +52,7 @@ void	finish_threads(t_data *data)
 	pthread_mutex_unlock(&data->scheduler_mutex);
 }
 
-void	join_created_threads(t_data *data, int num)
+static void	join_created_threads(t_data *data, int num)
 {
 	int	i;
 

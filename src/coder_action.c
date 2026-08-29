@@ -12,6 +12,11 @@
 
 #include "codexion.h"
 
+static void	start_refactor(t_coder *coder);
+static void	start_debuging(t_coder *coder);
+static void	start_compile(t_coder *coder);
+static void	leave_dongle(t_coder *coder);
+
 void	execute_coder_cycle(t_coder *coder)
 {
 	take_dongles(coder);
@@ -23,7 +28,7 @@ void	execute_coder_cycle(t_coder *coder)
 	start_refactor(coder);
 }
 
-void	leave_dongle(t_coder *coder)
+static void	leave_dongle(t_coder *coder)
 {
 	long long	time;
 
@@ -42,7 +47,7 @@ void	leave_dongle(t_coder *coder)
 	pthread_mutex_unlock(&coder->data->scheduler_mutex);
 }
 
-void	start_compile(t_coder *coder)
+static void	start_compile(t_coder *coder)
 {
 	long long	time;
 
@@ -71,7 +76,7 @@ void	start_compile(t_coder *coder)
 	}
 }
 
-void	start_debuging(t_coder *coder)
+static void	start_debuging(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{
@@ -80,7 +85,7 @@ void	start_debuging(t_coder *coder)
 	}
 }
 
-void	start_refactor(t_coder *coder)
+static void	start_refactor(t_coder *coder)
 {
 	if (!check_simulation_status(coder))
 	{

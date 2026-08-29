@@ -13,10 +13,11 @@
 #include "codexion.h"
 #include <pthread.h>
 
-void	take_single_dongle(t_coder *coder);
-int		try_take_dongle(t_dongle *first, t_dongle *second);
+static void	take_single_dongle(t_coder *coder);
+static int	try_take_dongle(t_dongle *first, t_dongle *second);
+static int	take_dongle(t_coder *coder, t_request *request);
 
-void	complete_dongle_acquisition(t_coder *coder);
+static void	complete_dongle_acquisition(t_coder *coder);
 
 void	take_dongles(t_coder *coder)
 {
@@ -46,7 +47,7 @@ void	take_dongles(t_coder *coder)
 	pthread_mutex_unlock(&coder->data->scheduler_mutex);
 }
 
-void	take_single_dongle(t_coder *coder)
+static void	take_single_dongle(t_coder *coder)
 {
 	long long	time;
 
@@ -57,7 +58,7 @@ void	take_single_dongle(t_coder *coder)
 	print_log(coder->data, coder, "take", time);
 }
 
-void	complete_dongle_acquisition(t_coder *coder)
+static void	complete_dongle_acquisition(t_coder *coder)
 {
 	long long	time;
 
@@ -69,7 +70,7 @@ void	complete_dongle_acquisition(t_coder *coder)
 	heap_pop(&coder->right_dongle->heap, coder);
 }
 
-int	try_take_dongle(t_dongle *first, t_dongle *second)
+static int	try_take_dongle(t_dongle *first, t_dongle *second)
 {
 	long long int	time;
 	int				flag1;
@@ -91,7 +92,7 @@ int	try_take_dongle(t_dongle *first, t_dongle *second)
 	return (0);
 }
 
-int	take_dongle(t_coder *coder, t_request *request)
+static int	take_dongle(t_coder *coder, t_request *request)
 {
 	t_dongle	*first;
 	t_dongle	*second;

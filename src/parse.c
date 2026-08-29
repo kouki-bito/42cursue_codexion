@@ -13,7 +13,10 @@
 #include "codexion.h"
 #include <unistd.h>
 
-int	ft_check_zero(t_data *data);
+static int	ft_atoi_safe(char *str);
+static int	ft_check_format(char *argv[]);
+static int	ft_is_num(char argv[]);
+static int	ft_check_zero(t_data *data);
 
 int	ft_parse(int argc, char *argv[], t_data *data)
 {
@@ -43,7 +46,7 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 	return (1);
 }
 
-int	ft_check_zero(t_data *data)
+static int	ft_check_zero(t_data *data)
 {
 	if ((*data).number_of_coders == 0)
 		return (0);
@@ -58,7 +61,7 @@ int	ft_check_zero(t_data *data)
 	return (1);
 }
 
-int	ft_atoi_safe(char *str)
+static int	ft_atoi_safe(char *str)
 {
 	long	res;
 	int		i;
@@ -81,7 +84,7 @@ int	ft_atoi_safe(char *str)
 	return ((int)res);
 }
 
-int	ft_check_format(char *argv[])
+static int	ft_check_format(char *argv[])
 {
 	int	i;
 
@@ -98,7 +101,7 @@ int	ft_check_format(char *argv[])
 	return (1);
 }
 
-int	ft_is_num(char argv[])
+static int	ft_is_num(char argv[])
 {
 	int	i;
 

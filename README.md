@@ -14,8 +14,8 @@ The project focuses on:
 - Shared-resource allocation
 - FIFO and EDF scheduling
 - Binary heap priority queues
-- Deadlock and starvation prevention
-- Precise timing and burnout detection
+- Deadlock prevention and starvation mitigation
+- Deadline-based burnout detection
 - Thread-safe logging
 
 A separate monitor thread observes coder deadlines and stops the simulation when a coder burns out or when every coder has completed the required number of compilations.
@@ -99,6 +99,8 @@ A smaller deadline has higher priority.
 
 When deadlines are equal, the request sequence number is used as a deterministic tie-breaker. Requests that do not compete for the same dongles may still compile concurrently.
 
+A request is eligible to compile only when both required dongles are currently available. Among eligible competing requests, EDF gives priority to the earliest burnout deadline.
+
 ### Priority queue
 
 Each dongle maintains pending requests in a binary min-heap.
@@ -122,11 +124,11 @@ Allocation is handled as a single scheduler operation: a coder either acquires b
 
 A shared scheduler mutex serializes the decision that checks and updates the state of both dongles.
 
-### Starvation prevention
+### Starvation mitigation
 
 Pending requests are retained in priority queues instead of relying only on operating-system thread scheduling.
 
-FIFO preserves request arrival order. EDF prioritizes requests according to burnout deadlines, with a deterministic request-number tie-breaker.
+FIFO preserves request arrival order. Among eligible requests, EDF prioritizes requests according to burnout deadlines, with a deterministic request-number tie-breaker. These policies reduce the risk of starvation when coders compete for the same dongles.
 
 Condition-variable broadcasts wake waiting coders whenever allocation-relevant state changes.
 
@@ -144,7 +146,7 @@ When only one coder exists, only one dongle exists. The coder takes that dongle 
 
 A dedicated monitor thread tracks the nearest active burnout deadline.
 
-The monitor uses a timed condition-variable wait and rechecks coder state after waking. Timing is measured with a monotonic clock so that system clock adjustments do not change simulation deadlines.
+The monitor uses a timed condition-variable wait and rechecks coder state after waking. Simulation deadlines are stored and compared using `CLOCK_MONOTONIC`. Before each timed wait, the monotonic deadline is converted to the absolute `CLOCK_REALTIME` value required by the default condition variable.
 
 ### Serialized logging
 
@@ -235,11 +237,4 @@ The following references were used while studying and implementing the project:
 
 ### Use of AI
 
-AI was used only as a learning aid for:
-
-- Understanding POSIX mutexes and condition variables
-- Studying race conditions, deadlocks, lost wakeups, and starvation
-- Learning how priority queues, FIFO, and EDF scheduling work
-- Understanding debugging tools and concurrency-testing methods
-
-AI was not used to generate or implement the submitted source code. All implementation decisions were made by the author after checking the subject requirements and confirming the program's behavior through compilation, testing, and debugging.
+AI was used as a learning aid to clarify concurrency concepts, priority queues, scheduling policies, and debugging methods. The author wrote, tested, and verified the submitted implementation.
