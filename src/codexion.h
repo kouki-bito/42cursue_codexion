@@ -6,7 +6,7 @@
 /*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 04:34:16 by kbito             #+#    #+#             */
-/*   Updated: 2026/08/27 19:58:47 by kbito            ###   ########.fr       */
+/*   Updated: 2026/08/28 18:20:44 by kbito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ struct							s_deque
 	struct s_deque				*next;
 };
 
+int								init_cond(t_data *data);
 t_request						make_request(t_coder *coder);
 void							wait_for_start(t_coder *coder);
 void							has_finished(t_coder *coder);
@@ -117,8 +118,6 @@ int								ft_is_num(char argv[]);
 int								ft_check_format(char *argv[]);
 
 // int clean_up(t_data *data);
-void							*execute_safely(pthread_mutex_t *mutex,
-									void *(*func)(t_coder *), t_coder *argv);
 int								ft_atoi_safe(char *str);
 int								init_mutex_and_cond(t_data *data);
 int								is_simulation_ended(t_data *data);
@@ -140,6 +139,7 @@ void							execute_coder_cycle(t_coder *coder);
 // monitor.c
 int								check_dead(t_coder *coders);
 void							*monitor(void *pointer);
+void							broadcast_coders(t_coder *coders);
 
 // init.c
 int								init_coder(t_data *data);
@@ -152,7 +152,7 @@ long long						get_dongle_cool_time(t_dongle *dongle);
 long long						max_cool_time(t_dongle *first,
 									t_dongle *second);
 // destroy.c
-void							destroy_all(t_data *data);
+void							destroy_data(t_data *data);
 void							destroy_all(t_data *data);
 void							destroy_dongle(t_dongle *dongle, int num);
 void							destroy_coder(t_coder *coder, int num);

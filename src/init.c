@@ -6,7 +6,7 @@
 /*   By: kbito <kbito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 20:02:21 by kbito             #+#    #+#             */
-/*   Updated: 2026/08/28 15:47:31 by kbito            ###   ########.fr       */
+/*   Updated: 2026/08/28 18:20:22 by kbito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,17 @@ int	init_coder_mutex_and_cond(t_data *data)
 	while (i < data->number_of_coders)
 	{
 		if (pthread_mutex_init(&(data->coder[i].coder_mutex), NULL))
-		{
-			destroy_coder(data->coder, i);
-		}
+			return (destroy_coder(data->coder, i), 0);
 		if (pthread_mutex_init(&(data->coder[i].action_sleep_mutex), NULL))
 		{
 			pthread_mutex_destroy(&(data->coder[i].coder_mutex));
-			destroy_coder(data->coder, i);
-			return (0);
+			return (destroy_coder(data->coder, i), 0);
 		}
 		if (pthread_cond_init(&(data->coder[i].action_sleep_cond), NULL))
 		{
 			pthread_mutex_destroy(&(data->coder[i].coder_mutex));
 			pthread_mutex_destroy(&(data->coder[i].action_sleep_mutex));
-			destroy_coder(data->coder, i);
-			return (0);
+			return (destroy_coder(data->coder, i), 0);
 		}
 		i++;
 	}
@@ -120,11 +116,28 @@ int	init_dongle_mutex_and_cond(t_data *data)
 
 int	init_mutex_and_cond(t_data *data)
 {
-	if (!pthread_cond_init(&(data->scheduler_cond), NULL)
-		&& !pthread_cond_init(&(data->state_cond), NULL)
-		&& !pthread_mutex_init(&(data->data_mutex), NULL)
-		&& !pthread_mutex_init(&(data->log_mutex), NULL)
-		&& !pthread_mutex_init(&(data->scheduler_mutex), NULL))
-		return (1);
-	return (0);
+	if (!init_cond(data))
+		return (0);
+	if (pthread_mutex_init(&(data->data_mutex), NULL))
+	{
+		pthread_cond_destroy(&(data->scheduler_cond));
+		pthread_cond_destroy(&(data->state_cond));
+		return (0);
+	}
+	if (pthread_mutex_init(&(data->log_mutex), NULL))
+	{
+		pthread_cond_destroy(&(data->scheduler_cond));
+		pthread_cond_destroy(&(data->state_cond));
+		pthread_mutex_destroy(&(data->data_mutex));
+		return (0);
+	}
+	if (pthread_mutex_init(&(data->scheduler_mutex), NULL))
+	{
+		pthread_cond_destroy(&(data->scheduler_cond));
+		pthread_cond_destroy(&(data->state_cond));
+		pthread_mutex_destroy(&(data->data_mutex));
+		pthread_mutex_destroy(&(data->log_mutex));
+		return (0);
+	}
+	return (1);
 }

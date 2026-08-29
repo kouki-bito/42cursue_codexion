@@ -63,13 +63,17 @@ void	*monitor(void *pointer)
 void	wait_coders(t_data *data)
 {
 	pthread_mutex_lock(&data->data_mutex);
-	while (data->read_count < data->number_of_coders)
+	while (data->read_count < data->number_of_coders
+		&& !data->is_simulation_ended)
 	{
 		pthread_cond_wait(&data->state_cond, &data->data_mutex);
 	}
-	data->start_time = get_time_ms();
-	set_all_coder_time(data);
-	data->start_flag = 1;
+	if (!data->is_simulation_ended)
+	{
+		data->start_time = get_time_ms();
+		set_all_coder_time(data);
+		data->start_flag = 1;
+	}
 	pthread_cond_broadcast(&data->state_cond);
 	pthread_mutex_unlock(&data->data_mutex);
 }
