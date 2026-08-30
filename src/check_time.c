@@ -12,6 +12,7 @@
 
 #include "codexion.h"
 
+static long long	get_real_time(void);
 long long	get_time_ms(void)
 {
 	struct timespec	ts;
@@ -38,7 +39,7 @@ struct timespec	get_interval_time(long long time)
 	return (ts);
 }
 
-long long	get_real_time(void)
+static long long	get_real_time(void)
 {
 	struct timeval	tv;
 

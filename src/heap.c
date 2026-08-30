@@ -12,7 +12,7 @@
 
 #include "codexion.h"
 
-void		heap_swap(t_heap *manegment, int b, int a);
+static void	heap_swap(t_heap *manegment, int b, int a);
 void		heap_pop(t_heap *manegment, t_coder *coder);
 static void	heap_down(t_heap *manegment, int index);
 static void	heap_up(t_heap *manegment, int index);
@@ -39,7 +39,7 @@ void	heap_push(t_heap *managment, t_request *request)
 	}
 }
 
-void	heap_swap(t_heap *manegment, int b, int a)
+static void	heap_swap(t_heap *manegment, int b, int a)
 {
 	t_request	temp;
 
@@ -100,7 +100,7 @@ static void	heap_down(t_heap *manegment, int index)
 	}
 }
 
-void	heap_up(t_heap *manegment, int index)
+static void	heap_up(t_heap *manegment, int index)
 {
 	int	parent;
 

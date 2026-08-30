@@ -12,13 +12,10 @@
 
 #include "codexion.h"
 
-int			check_start(t_data *data);
-void		wait_coders(t_data *data);
+static void	wait_coders(t_data *data);
 void		set_all_coder_time(t_data *data);
-int			check_coder_compile_count(t_coder *coder);
 
 long long	get_min_burnout(t_coder *coder);
-int			check_is_finished(t_data *data);
 static void	wait_monitor_event(t_data *data, t_coder *coders);
 
 void	broadcast_coders(t_coder *coders)

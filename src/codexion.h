@@ -53,13 +53,6 @@ struct						s_data
 	t_dongle				*dongle;
 };
 
-struct						s_condtion
-{
-	int						think;
-	int						complie;
-	int						debuging;
-	int						recatoring;
-};
 struct						s_request
 {
 	long long				deadline;
@@ -100,6 +93,9 @@ t_request					make_request(t_coder *coder);
 void						wait_for_start(t_coder *coder);
 void						has_finished(t_coder *coder);
 
+void						set_all_coder_time(t_data *data);
+
+long long					get_min_burnout(t_coder *coder);
 void						cool_time_sleep(t_dongle *first, t_dongle *second,
 								t_coder *coder);
 void						take_dongles(t_coder *coder);

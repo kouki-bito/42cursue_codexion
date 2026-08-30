@@ -50,17 +50,3 @@ void	wait_for_start(t_coder *coder)
 	}
 	pthread_mutex_unlock(&coder->data->data_mutex);
 }
-
-int	check_coder_compile_count(t_coder *coders)
-{
-	int	i;
-
-	i = 0;
-	while (i < coders[0].data->number_of_coders)
-	{
-		if (check_count_compile(&coders[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
