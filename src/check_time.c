@@ -13,6 +13,7 @@
 #include "codexion.h"
 
 static long long	get_real_time(void);
+
 long long	get_time_ms(void)
 {
 	struct timespec	ts;

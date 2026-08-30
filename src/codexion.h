@@ -9,15 +9,16 @@
 /*   Updated: 2026/08/28 18:20:44 by kbito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <limits.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/time.h>
-#include <time.h>
-#include <unistd.h>
+#ifndef CODEXION_H
+# define CODEXION_H
+# include <limits.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/time.h>
+# include <time.h>
+# include <unistd.h>
 
 typedef struct s_data		t_data;
 typedef struct s_dongle		t_dongle;
@@ -25,7 +26,6 @@ typedef struct s_coder		t_coder;
 typedef struct s_heap		t_heap;
 typedef struct s_request	t_request;
 
-/* 2. 依存関係の順序に従って構造体を定義 */
 struct						s_data
 {
 	long long				number_of_coders;
@@ -152,3 +152,4 @@ void						set_dongle_use(t_dongle *first, t_dongle *second,
 void						set_dongle_cool_time(t_dongle *first,
 								t_dongle *second, long long cool_time,
 								long long now);
+#endif
