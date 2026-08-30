@@ -23,7 +23,7 @@ int	ft_parse(int argc, char *argv[], t_data *data)
 	if (argc != 9)
 		return (write(2, "Error: Invalid number of arguments.\n", 36), 0);
 	if (!ft_check_format(argv))
-		return (write(2, "Error: Invalid format.\n", 24), 0);
+		return (write(2, "Error: Invalid format.\n", 23), 0);
 	(*data).number_of_coders = ft_atoi_safe(argv[1]);
 	(*data).time_to_burnout = ft_atoi_safe(argv[2]);
 	(*data).time_to_compile = ft_atoi_safe(argv[3]);
